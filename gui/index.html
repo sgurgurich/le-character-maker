@@ -1,0 +1,1690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LE Character Maker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 16 16 30 3 16Z' fill='%23d9a441'/%3E%3Cpath d='M16 9 23 16 16 23 9 16Z' fill='%23141821'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0e1117;
+    --panel: #151a23;
+    --panel-2: #1b212c;
+    --panel-3: #222a37;
+    --line: #262e3d;
+    --line-strong: #343e52;
+    --text: #e7eaf0;
+    --muted: #8d97aa;
+    --faint: #5c6679;
+    --gold: #d9a441;
+    --gold-soft: rgba(217, 164, 65, 0.13);
+    --gold-line: rgba(217, 164, 65, 0.45);
+    --danger: #e0645c;
+    --danger-soft: rgba(224, 100, 92, 0.13);
+    --ok: #5fbf8a;
+    --warn: #e0b24c;
+    --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --mono: "Cascadia Mono", Consolas, monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--text); font: 14px/1.45 var(--font); overflow: hidden; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+
+  .app { display: grid; grid-template-columns: 250px minmax(0, 1fr); height: 100vh; }
+
+  /* ---------- sidebar ---------- */
+  aside { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  .brand { display: flex; align-items: center; gap: 9px; padding: 14px 14px 10px; font-weight: 600; font-size: 13px; letter-spacing: .02em; color: var(--muted); }
+  .brand svg { width: 18px; height: 18px; }
+  .new { margin: 4px 12px 10px; }
+  .list { overflow-y: auto; padding: 0 8px 8px; flex: 1; }
+  .char { width: 100%; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; padding: 8px; border: 1px solid transparent; border-radius: 8px; background: none; text-align: left; cursor: pointer; }
+  .char:hover { background: var(--panel-2); }
+  .char.active { background: var(--gold-soft); border-color: var(--gold-line); }
+  .lvl { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 12px; background: var(--bg); border: 1px solid var(--line-strong); font-variant-numeric: tabular-nums; }
+  .char.active .lvl { border-color: var(--gold); color: var(--gold); }
+  .char .n { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; gap: 6px; align-items: center; }
+  .char .c { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tag { font-size: 9.5px; font-weight: 700; letter-spacing: .05em; padding: 1px 5px; border-radius: 4px; color: var(--muted); border: 1px solid var(--line-strong); flex: none; }
+  .tag.hc { color: #f3b1ac; border-color: rgba(224,100,92,.45); }
+  .tag.ssf { color: #9fd0f5; border-color: rgba(120,180,230,.45); }
+  .aside-foot { border-top: 1px solid var(--line); padding: 8px 10px; display: flex; gap: 4px; }
+  .icon-btn { background: none; border: 1px solid transparent; color: var(--muted); border-radius: 6px; padding: 5px 8px; cursor: pointer; font-size: 12px; }
+  .icon-btn:hover { background: var(--panel-2); color: var(--text); }
+  .icon-btn.has-update { color: var(--gold); }
+  .icon-btn.has-update::before { content: "● "; }
+  .notes { white-space: pre-wrap; max-height: 220px; overflow-y: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+
+  /* ---------- main ---------- */
+  main { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .banner { padding: 8px 20px; background: var(--danger-soft); color: #f3b1ac; border-bottom: 1px solid rgba(224,100,92,.35); font-size: 13px; }
+  .head { padding: 18px 28px 0; background: var(--bg); }
+  .head-row { display: flex; align-items: center; gap: 12px; max-width: 980px; }
+  .head h1 { margin: 0; font-size: 22px; line-height: 1.2; }
+  .head .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .head .actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .tabs { display: flex; gap: 2px; margin-top: 16px; border-bottom: 1px solid var(--line); max-width: 980px; }
+  .tab { background: none; border: none; border-bottom: 2px solid transparent; padding: 9px 14px; color: var(--muted); cursor: pointer; font-weight: 500; position: relative; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); border-bottom-color: var(--gold); }
+  .tab .dot { position: absolute; top: 8px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .content { flex: 1; overflow-y: auto; min-height: 0; }
+  .panel { max-width: 980px; padding: 20px 28px 140px; display: grid; gap: 14px; }
+  .empty { display: grid; place-items: center; height: 100%; color: var(--muted); text-align: center; padding: 24px; }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; min-height: 28px; }
+  .card-head h2 { margin: 0; font-size: 14px; font-weight: 600; }
+  .card-head .aside { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .card-head .meta { color: var(--muted); font-size: 12px; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 14px; }
+
+  label.f { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: var(--muted); }
+  input[type=text], input[type=number], select { background: var(--bg); border: 1px solid var(--line-strong); border-radius: 6px; padding: 7px 9px; width: 100%; min-width: 0; }
+  input:hover, select:hover { border-color: #4a5775; }
+  input:disabled, select:disabled { opacity: .5; }
+  input[type=range] { accent-color: var(--gold); width: 100%; }
+  .changed { border-color: var(--gold) !important; box-shadow: 0 0 0 1px var(--gold) inset; }
+  .level-row { display: grid; grid-template-columns: 1fr 76px; gap: 12px; align-items: center; }
+
+  .kv { display: flex; gap: 28px; flex-wrap: wrap; }
+  .kv .v { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .kv .v .to { color: var(--gold); }
+  .kv .k { font-size: 12px; color: var(--muted); }
+  .muted { color: var(--muted); }
+  .small { font-size: 12px; }
+  .note { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
+  .note.warn { color: var(--warn); }
+  .help { display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--line-strong); color: var(--muted); font-size: 10px; cursor: help; flex: none; }
+
+  .btn { border: 1px solid var(--line-strong); background: var(--panel-2); border-radius: 6px; padding: 7px 12px; cursor: pointer; white-space: nowrap; }
+  .btn:hover:not(:disabled) { border-color: #56658a; background: var(--panel-3); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.primary { background: var(--gold); border-color: var(--gold); color: #1a1406; font-weight: 600; }
+  .btn.primary:hover:not(:disabled) { background: #e6b556; border-color: #e6b556; }
+  .btn.danger { color: #f3b1ac; }
+  .btn.danger:hover:not(:disabled) { background: var(--danger-soft); border-color: var(--danger); }
+  .btn.ghost { background: none; border-color: transparent; color: var(--muted); }
+  .btn.ghost:hover:not(:disabled) { color: var(--text); background: var(--panel-2); border-color: var(--line-strong); }
+  .btn.sm { padding: 4px 9px; font-size: 12px; }
+  .btn.block { width: 100%; }
+  /* A one-off action that has been queued: stays visible with its result and an undo. */
+  .btn.queued { background: var(--gold-soft); border-color: var(--gold-line); color: var(--gold); }
+  .btn.queued::before { content: "✓ "; }
+  .actions-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  .menu { position: relative; }
+  .menu > summary { list-style: none; }
+  .menu > summary::-webkit-details-marker { display: none; }
+  .menu-pop { position: absolute; right: 0; top: calc(100% + 6px); z-index: 20; background: var(--panel-2); border: 1px solid var(--line-strong); border-radius: 8px; padding: 4px; min-width: 190px; box-shadow: 0 12px 32px rgba(0,0,0,.45); display: grid; }
+  .menu-pop button { text-align: left; background: none; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer; }
+  .menu-pop button:hover { background: var(--panel-3); }
+  .menu-pop button.danger { color: #f3b1ac; }
+
+  .skills { display: grid; gap: 7px; }
+  .skill { display: grid; grid-template-columns: 170px 1fr 104px; gap: 12px; align-items: center; font-size: 13px; }
+  .bar { height: 6px; border-radius: 3px; background: var(--bg); overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--gold); }
+  .skill .x { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12px; }
+
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 11.5px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--muted); }
+  .chip.done { color: var(--ok); border-color: rgba(95,191,138,.4); }
+
+  .rows > * + * { border-top: 1px solid var(--line); }
+  .slot-row { display: grid; grid-template-columns: 86px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 9px 0; }
+  .slot-row .slot { color: var(--muted); font-size: 12px; padding-top: 2px; }
+  .slot-row.removing { opacity: .45; }
+  .slot-row.removing .item-name { text-decoration: line-through; }
+  .slot-row .row-actions { display: flex; gap: 4px; opacity: .55; transition: opacity .12s; }
+  .slot-row:hover .row-actions, .slot-row .row-actions:focus-within { opacity: 1; }
+  .new-badge { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--gold); }
+  .affix { font-size: 12px; color: var(--muted); }
+  .affix .t { display: inline-block; min-width: 24px; color: var(--faint); }
+  .empty-slot { color: var(--faint); }
+
+  .faction { display: grid; grid-template-columns: minmax(150px, 1fr) 190px 190px; gap: 14px; align-items: end; padding: 10px 0; }
+
+  .pending { position: fixed; left: 250px; right: 0; bottom: 0; background: rgba(21,26,35,.97); border-top: 1px solid var(--line-strong); padding: 10px 28px; display: flex; gap: 14px; align-items: center; transform: translateY(110%); transition: transform .18s ease; z-index: 5; }
+  .pending.show { transform: none; }
+  .pending .count { color: var(--gold); font-weight: 600; white-space: nowrap; }
+  .pending .list-changes { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; max-height: 64px; overflow-y: auto; }
+  .pchip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; background: var(--panel-2); border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px 4px 3px 10px; }
+  .pchip button { background: none; border: none; color: var(--faint); cursor: pointer; width: 18px; height: 18px; border-radius: 50%; line-height: 1; }
+  .pchip button:hover { color: var(--text); background: var(--panel-3); }
+
+  dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line-strong); border-radius: 12px; padding: 0; width: min(520px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+  dialog::backdrop { background: rgba(5,7,10,.6); }
+  dialog form { padding: 20px; display: grid; gap: 14px; }
+  dialog h3 { margin: 0; font-size: 17px; }
+  dialog .row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+  dialog .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .checks { display: flex; gap: 14px; flex-wrap: wrap; }
+  .checks label { display: flex; gap: 6px; align-items: center; cursor: pointer; font-size: 13px; }
+  .checks input { accent-color: var(--gold); }
+  details.more > summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  details.more[open] > summary { margin-bottom: 12px; }
+  .preview { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-height: 64px; }
+
+  .toasts { position: fixed; right: 16px; bottom: 90px; display: grid; gap: 8px; z-index: 30; max-width: 440px; }
+  .toast { background: var(--panel-2); border: 1px solid var(--line-strong); border-left: 3px solid var(--ok); border-radius: 8px; padding: 10px 14px; box-shadow: 0 8px 24px rgba(0,0,0,.4); animation: in .18s ease; font-size: 13px; }
+  .toast.error { border-left-color: var(--danger); }
+  .toast.warn { border-left-color: var(--warn); }
+  .toast ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+  @keyframes in { from { opacity: 0; transform: translateY(6px); } }
+
+  @media (max-width: 820px) {
+    .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+    aside { max-height: 32vh; border-right: 0; border-bottom: 1px solid var(--line); }
+    .head, .panel { padding-left: 16px; padding-right: 16px; }
+    .pending { left: 0; padding: 10px 16px; flex-wrap: wrap; }
+    .faction { grid-template-columns: 1fr; }
+    dialog .two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 29 16 16 30 3 16Z" fill="#d9a441"/><path d="M16 9 23 16 16 23 9 16Z" fill="#141821"/></svg>
+      LE Character Maker
+    </div>
+    <button class="btn primary new" id="newBtn">+ New character</button>
+    <button class="btn ghost new" id="importNewBtn" style="margin-top:-4px">Import build…</button>
+    <div class="list" id="list"></div>
+    <div class="aside-foot">
+      <button class="icon-btn" id="openSaves" title="Open the save folder">Saves</button>
+      <button class="icon-btn" id="openBackups" title="Open the backups folder">Backups</button>
+      <button class="icon-btn" id="itemDataBtn" title="Item data (names for items, affixes and uniques)">Item data</button>
+      <button class="icon-btn" id="refresh" title="Reload characters from disk" style="margin-left:auto">↻</button>
+    </div>
+    <div class="aside-foot" style="border-top:0;padding-top:0">
+      <button class="icon-btn" id="updateBtn">Check for updates</button>
+      <span class="small muted" id="versionLabel" style="margin-left:auto;align-self:center;padding-right:6px"></span>
+    </div>
+  </aside>
+  <main>
+    <div class="banner" id="gameBanner" hidden>Last Epoch is running. Close the game to save; it rewrites saves when it exits.</div>
+    <div id="head"></div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div class="pending" id="pending">
+  <span class="count" id="pendingCount"></span>
+  <div class="list-changes" id="pendingList"></div>
+  <button class="btn ghost" id="discardBtn">Discard</button>
+  <button class="btn primary" id="saveBtn" title="Ctrl+S">Save</button>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<!-- New character -->
+<dialog id="newDlg">
+  <form method="dialog" id="newForm">
+    <h3>New character</h3>
+    <label class="f">Name<input type="text" name="name" required maxlength="30" autocomplete="off"></label>
+    <div class="two">
+      <label class="f">Class<select name="class" data-class-select></select></label>
+      <label class="f">Mastery<select name="mastery"></select></label>
+    </div>
+    <div class="checks" style="flex-direction:column;gap:8px">
+      <label><input type="checkbox" name="grant-all-passives" checked> All passive points</label>
+      <label><input type="checkbox" name="unlock-idols" checked> All idol slots unlocked</label>
+    </div>
+    <details class="more">
+      <summary>More options</summary>
+      <div style="display:grid;gap:12px">
+        <div class="two">
+          <label class="f">Level<input type="number" name="level" min="1" max="100" value="100"></label>
+          <label class="f">Unspent passive points<input type="number" name="passive-points" min="0" value="0" disabled></label>
+        </div>
+        <label class="f">Progression preset<select name="preset" data-preset-select></select></label>
+        <div class="checks" data-groups></div>
+        <div class="two">
+          <label class="f">Mode<select name="hardcore"><option value="">Softcore</option><option value="true">Hardcore</option></select></label>
+          <label class="f">Trading<select name="solo"><option value="">Standard</option><option value="true">Solo Challenge</option></select></label>
+        </div>
+      </div>
+    </details>
+    <p class="note" style="margin:0" id="newHint"></p>
+    <div class="row"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Create</button></div>
+  </form>
+</dialog>
+
+<!-- Clone -->
+<dialog id="cloneDlg">
+  <form method="dialog" id="cloneForm">
+    <h3>Clone character</h3>
+    <div class="two">
+      <label class="f">New name<input type="text" name="name" required maxlength="30" autocomplete="off"></label>
+      <label class="f">Level<input type="number" name="level" min="1" max="100"></label>
+    </div>
+    <p class="note" style="margin:0">Copies everything into the next free slot.</p>
+    <div class="row"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Clone</button></div>
+  </form>
+</dialog>
+
+<!-- Save progression preset -->
+<dialog id="captureDlg">
+  <form method="dialog" id="captureForm">
+    <h3>Save progression as preset</h3>
+    <label class="f">Preset name<input type="text" name="name" required pattern="[\w.\-]+" title="Letters, digits, - _ ." autocomplete="off"></label>
+    <label class="f">Note<input type="text" name="note" placeholder="e.g. Campaign done, monoliths unlocked"></label>
+    <div class="checks" data-groups></div>
+    <div class="checks"><label><input type="checkbox" name="force"> Overwrite an existing preset with this name</label></div>
+    <div class="row"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Save preset</button></div>
+  </form>
+</dialog>
+
+<!-- Save loadout -->
+<dialog id="loadoutDlg">
+  <form method="dialog" id="loadoutForm">
+    <h3>Save gear as loadout</h3>
+    <label class="f">Name<input type="text" name="name" required maxlength="60" pattern="[\w .()\-]+" title="Letters, digits, spaces and - _ . ( )" autocomplete="off"></label>
+    <label class="f">Note<input type="text" name="note" placeholder="e.g. Lightning Blast Runemaster"></label>
+    <div class="checks" data-loadout-groups></div>
+    <div class="checks"><label><input type="checkbox" name="force"> Overwrite an existing loadout with this name</label></div>
+    <div class="row"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Save loadout</button></div>
+  </form>
+</dialog>
+
+<!-- Item creator -->
+<dialog id="itemDlg" style="width:min(820px, calc(100vw - 32px))">
+  <form method="dialog" id="itemForm">
+    <h3 id="itemTitle">Create item</h3>
+    <div class="two">
+      <label class="f">Slot<select name="slot"></select></label>
+      <label class="f">Kind<select name="kind">
+        <option value="regular">Rare / Exalted</option>
+        <option value="unique">Unique or Set</option>
+        <option value="legendary">Legendary</option>
+      </select></label>
+    </div>
+    <div data-when="regular" class="two">
+      <label class="f">Item type<select name="type"></select></label>
+      <label class="f">Forging potential<input type="number" name="fp" min="0" max="255" value="40"></label>
+    </div>
+    <div data-when="unique legendary" class="two">
+      <label class="f">Unique<span style="display:grid;grid-template-columns:1fr;gap:6px"><input type="text" name="uq" placeholder="Search…" autocomplete="off"><select name="unique" size="5" style="padding:4px"></select></span></label>
+      <div style="display:grid;gap:12px;align-content:start">
+        <label class="f">Rolls <span data-out="uroll">100%</span><input type="range" name="uroll" min="0" max="100" value="100"></label>
+        <label class="f" data-when="unique"><span data-potlabel>Legendary Potential</span><input type="number" name="potential" min="0" max="4" placeholder="None"></label>
+      </div>
+    </div>
+    <div data-when="regular legendary">
+      <div style="display:grid;grid-template-columns:1fr 80px 90px;gap:8px;font-size:12px;color:var(--muted);margin-bottom:6px"><span>Affixes <span class="help" title="Up to 2 prefixes and 2 suffixes (idols: 1 each). Tiers above T5 make the item Exalted.">?</span></span><span>Tier</span><span>Roll %</span></div>
+      <div data-affixes style="display:grid;gap:8px"></div>
+    </div>
+    <div class="preview" data-preview></div>
+    <div class="row"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok">Add</button></div>
+  </form>
+</dialog>
+
+<!-- Import from LE Tools -->
+<dialog id="importDlg" style="width:min(760px, calc(100vw - 32px))">
+  <form method="dialog" id="importForm">
+    <h3>Import from LE Tools</h3>
+    <div class="small muted" style="display:grid;gap:4px">
+      <div>1. Drag <a id="copyBuildLink" class="btn sm" style="text-decoration:none;color:var(--text)" title="Drag me to your bookmarks bar">Copy LE Tools build</a> to your bookmarks bar (once).</div>
+      <div>2. Open a build on lastepochtools.com/planner and click that bookmark. <span class="help" title="No bookmark? In the build page's console (F12), run: copy(_loadedBuildSnapshot)">?</span></div>
+      <div>3. Paste it here:</div>
+    </div>
+    <textarea name="build" rows="3" placeholder="Paste the copied build…" style="width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:8px;font:12px var(--mono);resize:vertical"></textarea>
+    <div class="preview" data-import-preview><span class="note" style="margin:0">Paste a build to see what it contains.</span></div>
+    <div class="two">
+      <div style="display:grid;gap:8px">
+        <div class="small muted">What to import</div>
+        <div class="checks"><label><input type="radio" name="scope" value="all" checked> Everything</label><label><input type="radio" name="scope" value="pick"> Choose parts</label></div>
+        <div class="checks" data-modules style="flex-direction:column;gap:6px"></div>
+      </div>
+      <div style="display:grid;gap:8px;align-content:start">
+        <div class="small muted">Import into</div>
+        <div class="checks" style="flex-direction:column;gap:6px">
+          <label><input type="radio" name="target" value="current" checked> <span data-target-current>This character</span></label>
+          <label><input type="radio" name="target" value="new"> A new character</label>
+        </div>
+        <label class="f" hidden>Name<input type="text" name="name" maxlength="30" autocomplete="off"></label>
+        <div class="checks"><label><input type="checkbox" name="unlock-idols" checked> Also unlock all idol slots</label></div>
+      </div>
+    </div>
+    <div class="row"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn primary" value="ok" id="importBtn" disabled>Import</button></div>
+  </form>
+</dialog>
+
+<!-- Update available -->
+<dialog id="updateDlg">
+  <form method="dialog">
+    <h3 id="updateTitle"></h3>
+    <div class="small muted" id="updateSub" style="margin-top:-8px"></div>
+    <div class="notes" id="updateNotes"></div>
+    <div class="small" id="updateStatus"></div>
+    <div class="row" style="justify-content:space-between">
+      <span style="display:flex;gap:8px"><button type="button" class="btn ghost sm" id="updateSkip">Skip this version</button><a class="btn ghost sm" id="updatePage" target="_blank" rel="noopener" style="text-decoration:none">Release page</a></span>
+      <span style="display:flex;gap:8px"><button type="button" class="btn ghost" id="updateLater">Later</button><button type="button" class="btn primary" id="updateNow">Update now</button></span>
+    </div>
+  </form>
+</dialog>
+
+<!-- Item data -->
+<dialog id="itemDataDlg">
+  <form method="dialog">
+    <h3>Item data</h3>
+    <p class="small" id="itemDataStatus" style="margin:0"></p>
+    <div class="small muted" style="display:grid;gap:6px">
+      <div>Item, affix and unique names come from lastepochtools.com. To load or refresh them:</div>
+      <div>1. Drag <a id="exportItemDbLink" class="btn sm" style="text-decoration:none;color:var(--text)" title="Drag me to your bookmarks bar">Export LE Tools item data</a> to your bookmarks bar.</div>
+      <div>2. Open <a href="https://www.lastepochtools.com/planner/" target="_blank" rel="noopener">lastepochtools.com/planner</a> and click the bookmark. It downloads <code>le-item-data.json</code>.</div>
+      <div>3. Load that file: <input type="file" id="itemDataFile" accept=".json,application/json" style="font-size:12px"></div>
+    </div>
+    <div class="row"><button class="btn ghost" value="cancel">Close</button></div>
+  </form>
+</dialog>
+
+<!-- Confirm -->
+<dialog id="confirmDlg">
+  <form method="dialog">
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmBody" style="margin:0;color:var(--muted)"></p>
+    <div class="row"><button class="btn ghost" value="cancel">Cancel</button><button class="btn primary" id="confirmOk" value="ok">OK</button></div>
+  </form>
+</dialog>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const fmt = (n) => Number(n).toLocaleString('en-US');
+const short = (n) => n >= 1e9 ? `${n / 1e9}B` : n >= 1e6 ? `${n / 1e6}M` : n >= 1e3 ? `${n / 1e3}K` : String(n);
+
+const GROUP_LABELS = { campaign: 'Campaign & quests', monolith: 'Monolith', dungeons: 'Dungeons', arena: 'Arena' };
+const GEAR_GROUP_LABELS = { gear: 'Equipped gear', idols: 'Idols', blessings: 'Blessings' };
+const RARITY_COLORS = { Normal: '#c9ced8', Magic: '#7fb0ff', Rare: '#f0d468', Exalted: '#c08cff', Unique: '#f0a04b', Set: '#6fd88a', Legendary: '#ff7a55', Unknown: '#8b96ab' };
+const SLOT_NAMES = { 2: 'Helmet', 3: 'Body Armor', 4: 'Main Hand', 5: 'Off Hand', 6: 'Gloves', 7: 'Belt', 8: 'Boots', 9: 'Ring', 10: 'Ring', 11: 'Amulet', 12: 'Relic', 29: 'Idol' };
+const MATERIALS = [['runes', 'Runes', 999], ['glyphs', 'Glyphs', 999], ['shards', 'Affix shards', 999], ['keys', 'Keys', 99]];
+const TABS = [['character', 'Character'], ['progression', 'Progression'], ['gear', 'Gear'], ['stash', 'Stash']];
+
+let S = null;            // server state
+let selected = null;     // slot number
+let draft = null;        // pending edits for the selected character
+let tab = 'character';
+const gearCache = {}, materialsCache = {}, catalogCache = {};
+
+// ---------- API ----------
+async function api(method, url, body) {
+  const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'X-LE-Char': '1' }, body: body ? JSON.stringify(body) : undefined });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
+
+async function load(keepDraft = false) {
+  S = await api('GET', '/api/state');
+  $('#gameBanner').hidden = !S.gameRunning;
+  $('#openSaves').title = `Open the save folder\n${S.saveDir}`;
+  if (selected !== null && !S.characters.some((c) => c.slot === selected)) selected = null;
+  if (selected === null) selected = S.characters.find((c) => !c.error)?.slot ?? null;
+  if (!keepDraft) {
+    draft = null;
+    for (const cache of [gearCache, materialsCache]) for (const k in cache) delete cache[k];
+  }
+  renderList();
+  render();
+}
+
+// ---------- small helpers ----------
+function toast(msg, kind = 'ok', details = []) {
+  const el = document.createElement('div');
+  el.className = `toast ${kind}`;
+  // Merge repeats: 'X can't be used by a Rogue.' three times -> one line with ×3.
+  const counts = new Map();
+  for (const d of details) counts.set(d, (counts.get(d) ?? 0) + 1);
+  details = [...counts].map(([d, n]) => (n > 1 ? `${d} (×${n})` : d));
+  el.innerHTML = esc(msg) + (details.length ? `<ul>${details.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>` : '');
+  $('#toasts').append(el);
+  setTimeout(() => el.remove(), kind === 'error' ? 8000 : details.length ? 7000 : 3500);
+}
+
+function confirmBox(title, body, okLabel = 'OK', danger = false) {
+  $('#confirmTitle').textContent = title;
+  $('#confirmBody').textContent = body;
+  $('#confirmOk').textContent = okLabel;
+  $('#confirmOk').className = `btn ${danger ? 'danger' : 'primary'}`;
+  const dlg = $('#confirmDlg');
+  const form = $('form', dlg);
+  dlg.showModal();
+  // Resolve on submit/cancel rather than the dialog's close event, which some
+  // embedded browsers never fire.
+  return new Promise((resolve) => {
+    const finish = (v) => { form.removeEventListener('submit', onSubmit); dlg.removeEventListener('cancel', onCancel); resolve(v); };
+    const onSubmit = (e) => finish(e.submitter?.value === 'ok');
+    const onCancel = () => finish(false);
+    form.addEventListener('submit', onSubmit);
+    dlg.addEventListener('cancel', onCancel);
+  });
+}
+
+const current = () => S?.characters.find((c) => c.slot === selected);
+const classLabel = (c) => { const cls = S.classes[c.classId]; return !cls ? `Class ${c.classId}` : c.masteryId ? `${cls.masteries[c.masteryId]} · ${cls.name}` : cls.name; };
+const masteryOptions = (classId, value) => S.classes[classId].masteries.map((m, i) => `<option value="${i}" ${i == value ? 'selected' : ''}>${i ? esc(m) : 'None'}</option>`).join('');
+const maxPassives = (level) => Math.max(0, level - 2) + S.questPassiveCap;
+
+// ---------- sidebar ----------
+function renderList() {
+  const list = $('#list');
+  if (S.error) { list.innerHTML = `<p class="note warn" style="padding:8px">${esc(S.error)}</p>`; return; }
+  if (!S.characters.length) { list.innerHTML = '<p class="note" style="padding:8px">No characters yet.</p>'; return; }
+  list.innerHTML = S.characters.map((c) => c.error
+    ? `<div class="char" title="${esc(c.error)}"><div class="lvl">?</div><div><div class="n">Slot ${c.slot}</div><div class="c">Unreadable save</div></div></div>`
+    : `<button class="char ${c.slot === selected ? 'active' : ''}" data-slot="${c.slot}">
+        <div class="lvl">${c.level}</div>
+        <div style="min-width:0"><div class="n"><span style="overflow:hidden;text-overflow:ellipsis">${esc(c.name)}</span>${c.hardcore ? '<span class="tag hc">HC</span>' : ''}${c.solo ? '<span class="tag ssf">SSF</span>' : ''}</div>
+        <div class="c">${esc(classLabel(c))}</div></div>
+      </button>`).join('');
+}
+
+$('#list').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-slot]');
+  if (!b || Number(b.dataset.slot) === selected) return;
+  if (isDirty() && !(await confirmBox('Discard changes?', 'You have unsaved changes to this character.', 'Discard', true))) return;
+  selected = Number(b.dataset.slot);
+  draft = null;
+  renderList();
+  render();
+  $('#content').scrollTop = 0;
+});
+
+// ---------- draft & changes ----------
+function baseline(c) {
+  return {
+    name: c.name, class: c.classId, mastery: c.masteryId, level: c.level, hardcore: !!c.hardcore, solo: !!c.solo,
+    'passive-points': c.unspentPoints, 'reset-passives': false, 'grant-all-passives': false, 'unlock-idols': false,
+    'skill-xp': null, 'skill-slots': {}, 'ability-bar': null, preset: '', groups: [...S.groups], gold: c.goldInfo.gold ?? '',
+    'join-faction': '', 'faction-rank': {}, 'faction-favor': {},
+    runes: '', glyphs: '', shards: '', keys: '', 'ancient-bones': '', 'special-materials': false,
+    'clear-items': false, 'remove-gear': [], 'gear-source': '', 'gear-groups': [...S.gearGroups], 'create-items': [], 'remove-idols': [], 'import-build': null,
+  };
+}
+
+// The request body for saving: only what differs from the character now.
+function changes() {
+  const c = current();
+  if (!c || !draft) return {};
+  const base = baseline(c);
+  const out = {};
+  for (const k of ['name', 'class', 'mastery', 'level', 'hardcore', 'solo', 'passive-points', 'gold']) {
+    if (draft[k] !== '' && String(draft[k]) !== String(base[k])) out[k] = draft[k];
+  }
+  if (draft['reset-passives']) { out['reset-passives'] = true; out['passive-points'] = draft['passive-points']; }
+  if (draft['grant-all-passives']) { out['grant-all-passives'] = true; delete out['passive-points']; }
+  if (draft['unlock-idols']) out['unlock-idols'] = true;
+  if (draft['skill-xp'] !== null) out['skill-xp'] = draft['skill-xp'];
+  if (Object.keys(draft['skill-slots']).length) out['skill-slots'] = draft['skill-slots'];
+  if (draft['ability-bar']) out['ability-bar'] = draft['ability-bar'];
+  if (draft.preset) { out.preset = draft.preset; out.groups = draft.groups; }
+  if (draft['join-faction'] !== '') out['join-faction'] = Number(draft['join-faction']);
+  const ranks = Object.entries(draft['faction-rank']).filter(([id, r]) => c.factions.find((f) => f.id === Number(id))?.rank !== r);
+  if (ranks.length) out['faction-rank'] = Object.fromEntries(ranks);
+  const favors = Object.entries(draft['faction-favor']).filter(([id, v]) => v !== '' && c.factions.find((f) => f.id === Number(id))?.favor !== v);
+  if (favors.length) out['faction-favor'] = Object.fromEntries(favors);
+  for (const k of ['runes', 'glyphs', 'shards', 'keys', 'ancient-bones']) if (draft[k] !== '') out[k] = draft[k];
+  if (draft['special-materials'] && ['runes', 'glyphs', 'keys'].some((k) => k in out)) out['special-materials'] = true;
+  if (draft['clear-items']) out['clear-items'] = true;
+  if (draft['remove-gear'].length) out['remove-gear'] = draft['remove-gear'];
+  if (draft['create-items'].length) out['create-items'] = draft['create-items'].map(({ containerID, spec, position }) => ({ containerID, spec, position }));
+  if (draft['remove-idols'].length) out['remove-idols'] = draft['remove-idols'];
+  if (draft['gear-source'] && draft['gear-groups'].length) {
+    const [kind, ref] = draft['gear-source'].split(/:(.*)/s);
+    if (kind === 'loadout') out.loadout = ref; else out['copy-gear-from'] = Number(ref);
+    out['gear-groups'] = draft['gear-groups'];
+  }
+  if (draft['import-build']) out['import-build'] = { build: draft['import-build'].build, modules: draft['import-build'].modules };
+  if ('class' in out && !('mastery' in out)) out.mastery = draft.mastery;
+  return out;
+}
+const isDirty = () => Object.keys(changes()).length > 0;
+
+// Human-readable list of pending changes, each with the tab it lives on and an undo.
+function changeList() {
+  const c = current();
+  if (!c || !draft) return [];
+  const d = draft, base = baseline(c), list = [];
+  const add = (tab, text, undo) => list.push({ tab, text, undo });
+  const reset = (...keys) => () => { for (const k of keys) draft[k] = structuredClone(base[k]); };
+  if (d['import-build']) {
+    const imp = d['import-build'];
+    const parts = imp.modules.length === Object.keys(S.importModules).length ? 'everything' : imp.modules.map((m) => S.importModules[m].toLowerCase()).join(', ');
+    add('character', `Import “${imp.summary}”: ${parts}`, reset('import-build'));
+  }
+  if (d.name !== base.name) add('character', `Name → ${d.name}`, reset('name'));
+  if (d.class != base.class) add('character', `Class → ${S.classes[d.class].name}`, reset('class', 'mastery'));
+  else if (d.mastery != base.mastery) add('character', `Mastery → ${S.classes[d.class].masteries[d.mastery] || 'None'}`, reset('mastery'));
+  if (d.level != base.level) add('character', `Level ${base.level} → ${d.level}`, reset('level'));
+  if (d.hardcore !== base.hardcore) add('character', d.hardcore ? 'Hardcore' : 'Softcore', reset('hardcore'));
+  if (d.solo !== base.solo) add('character', d.solo ? 'Solo Challenge' : 'Standard trading', reset('solo'));
+  if (d['reset-passives']) add('progression', 'Reset passive tree', reset('reset-passives'));
+  if (d['grant-all-passives']) add('progression', `All passive points (${maxPassives(d.level)})`, reset('grant-all-passives'));
+  else if (String(d['passive-points']) !== String(base['passive-points'])) add('progression', `Unspent passives → ${d['passive-points']}`, reset('passive-points'));
+  if (d['skill-xp'] !== null) add('progression', 'Max all skills', reset('skill-xp'));
+  for (const [slot, id] of Object.entries(d['skill-slots'])) {
+    const was = c.skillTrees.find((t) => t.slot === Number(slot))?.id;
+    add('progression', `Skill ${Number(slot) + 1}: ${was ? skillName(c, was) + ' → ' : ''}${id ? skillName(c, id) : 'empty'}`, () => setSlot(c, Number(slot), was ?? ''));
+  }
+  if (d['ability-bar']) add('progression', 'Hotbar', reset('ability-bar'));
+  if (d['unlock-idols']) add('progression', 'Unlock all idol slots', reset('unlock-idols'));
+  if (d.preset) add('progression', `Apply preset “${d.preset}”`, reset('preset', 'groups'));
+  if (d['join-faction'] !== '') add('progression', `Join ${S.factionList.find((f) => f.id === Number(d['join-faction']))?.name}`, reset('join-faction'));
+  for (const [id, r] of Object.entries(d['faction-rank'])) {
+    const f = c.factions.find((x) => x.id === Number(id));
+    if (f && f.rank !== r) add('progression', `${f.name} rank ${f.rank} → ${r}`, () => { delete draft['faction-rank'][id]; });
+  }
+  for (const [id, v] of Object.entries(d['faction-favor'])) {
+    const f = c.factions.find((x) => x.id === Number(id));
+    if (f && v !== '' && f.favor !== v) add('progression', `${f.name} favor → ${fmt(v)}`, () => { delete draft['faction-favor'][id]; });
+  }
+  for (const it of d['create-items']) {
+    add('gear', `New ${it.preview.name}${it.containerID === 29 ? ' (idol)' : ` (${SLOT_NAMES[it.containerID]})`}`, () => { draft['create-items'] = draft['create-items'].filter((x) => x !== it); });
+  }
+  const g = gearCache[c.slot];
+  for (const cid of d['remove-gear']) {
+    const name = g?.equipped?.find((e) => e.containerID === cid)?.item?.name;
+    add('gear', `Remove ${name ?? SLOT_NAMES[cid]}`, () => { draft['remove-gear'] = draft['remove-gear'].filter((x) => x !== cid); });
+  }
+  for (const k of d['remove-idols']) {
+    const [x, y] = k.split(':').map(Number);
+    const name = g?.idols?.find((i) => i.position.x === x && i.position.y === y)?.name ?? 'idol';
+    add('gear', `Remove ${name}`, () => { draft['remove-idols'] = draft['remove-idols'].filter((v) => v !== k); });
+  }
+  if (d['gear-source'] && d['gear-groups'].length) {
+    const [kind, ref] = d['gear-source'].split(/:(.*)/s);
+    const from = kind === 'loadout' ? `loadout “${ref}”` : `${S.characters.find((x) => x.slot === Number(ref))?.name}'s gear`;
+    add('gear', `Replace ${d['gear-groups'].map((x) => GEAR_GROUP_LABELS[x].toLowerCase()).join(', ')} with ${from}`, reset('gear-source', 'gear-groups'));
+  }
+  if (d['clear-items']) add('gear', 'Remove all items', reset('clear-items'));
+  if (d.gold !== '' && String(d.gold) !== String(base.gold)) add('stash', `Gold → ${fmt(d.gold)}`, reset('gold'));
+  const mats = MATERIALS.filter(([k]) => d[k] !== '').map(([k, label]) => `${label.toLowerCase()} ${fmt(d[k])}`);
+  if (mats.length) add('stash', `Materials: ${mats.join(', ')}`, reset('runes', 'glyphs', 'shards', 'keys', 'special-materials'));
+  if (d['ancient-bones'] !== '') add('stash', `Ancient Bones → ${fmt(d['ancient-bones'])}`, reset('ancient-bones'));
+  return list;
+}
+
+// ---------- rendering ----------
+function render() {
+  const c = current();
+  if (!c) {
+    $('#head').innerHTML = '';
+    $('#content').innerHTML = `<div class="empty"><div><p style="font-size:16px;color:var(--text);margin:0 0 6px">No character selected</p><p style="margin:0">Create one, or pick one from the list.</p></div></div>`;
+    renderPending();
+    return;
+  }
+  if (!draft) draft = baseline(c);
+  renderHead(c);
+  renderTab(c);
+  renderPending();
+}
+
+function renderHead(c) {
+  const dirtyTabs = new Set(changeList().map((x) => x.tab));
+  const era = c.legacy ? 'Legacy' : `Cycle ${c.cycle}`;
+  $('#head').innerHTML = `<div class="head">
+    <div class="head-row">
+      <div style="min-width:0">
+        <h1>${esc(c.name)}</h1>
+        <div class="sub">Level ${c.level} ${esc(classLabel(c))}${c.hardcore ? ' · Hardcore' : ''}${c.solo ? ' · Solo Challenge' : ''} <span class="help" title="Slot ${c.slot} · save v${esc(c.saveVersion)} · ${esc(era)}${c.lastPlayed ? ` · last played ${esc(String(c.lastPlayed).slice(0, 10))}` : ''}">i</span></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" data-act="build-ready" title="Queues: level 100, all passive points, all idol slots, maxed skills, max faction rank and full crafting materials. Review, then save.">Make build-ready</button>
+        <details class="menu"><summary class="btn" title="More">⋯</summary>
+          <div class="menu-pop">
+            <button data-act="import">Import from LE Tools…</button>
+            <button data-act="clone">Clone character…</button>
+            <button data-act="capture">Save progression as preset…</button>
+            <button data-act="delete" class="danger">Delete character…</button>
+          </div>
+        </details>
+      </div>
+    </div>
+    <nav class="tabs">${TABS.map(([id, label]) => `<button class="tab ${tab === id ? 'active' : ''}" data-tab="${id}">${label}${dirtyTabs.has(id) ? '<span class="dot"></span>' : ''}</button>`).join('')}</nav>
+  </div>`;
+}
+
+function renderTab(c) {
+  const body = { character: characterTab, progression: progressionTab, gear: gearTab, stash: stashTab }[tab](c, draft);
+  $('#content').innerHTML = `<div class="panel">${body}</div>`;
+  markChanged();
+}
+
+// Re-render only the tab body and the chrome around it (keeps scroll position).
+function refresh() {
+  const c = current();
+  if (!c) return render();
+  const top = $('#content').scrollTop;
+  renderHead(c);
+  renderTab(c);
+  renderPending();
+  $('#content').scrollTop = top;
+}
+
+function markChanged() {
+  const c = current();
+  const base = baseline(c);
+  document.querySelectorAll('#content [data-k]').forEach((el) => {
+    const k = el.dataset.k;
+    if (el.type === 'range' || el.type === 'checkbox' || !(k in base)) return;
+    el.classList.toggle('changed', draft[k] !== '' && String(draft[k]) !== String(base[k]));
+  });
+}
+
+function renderPending() {
+  const list = changeList();
+  $('#pending').classList.toggle('show', list.length > 0);
+  $('#pendingCount').textContent = `${list.length} change${list.length === 1 ? '' : 's'}`;
+  $('#pendingList').innerHTML = list.map((x, i) => `<span class="pchip">${esc(x.text)}<button data-undo="${i}" title="Undo">×</button></span>`).join('');
+  $('#saveBtn').disabled = S?.gameRunning;
+  $('#saveBtn').title = S?.gameRunning ? 'Close Last Epoch first' : 'Save (Ctrl+S)';
+}
+
+// An action button that queues a one-off change. When queued it shows what will
+// happen, and clicking it again un-queues it.
+function actionBtn(act, label, queued, queuedLabel, { disabled = false, title = '' } = {}) {
+  return `<button class="btn sm ${queued ? 'queued' : ''}" data-act="${act}" ${disabled && !queued ? 'disabled' : ''} title="${esc(queued ? 'Queued. Click to undo.' : title)}">${esc(queued ? queuedLabel : label)}</button>`;
+}
+
+// ---------- Character tab ----------
+function characterTab(c, d) {
+  return `
+  <div class="card">
+    <div class="cols">
+      <label class="f">Name<input type="text" data-k="name" value="${esc(d.name)}" maxlength="30"></label>
+      <label class="f">Class<select data-k="class">${S.classes.map((cl, i) => `<option value="${i}" ${i == d.class ? 'selected' : ''}>${esc(cl.name)}</option>`).join('')}</select></label>
+      <label class="f">Mastery<select data-k="mastery">${masteryOptions(d.class, d.mastery)}</select></label>
+    </div>
+    ${d.class != c.classId ? '<p class="note warn">Changing class clears skills and the ability bar and refunds all passives.</p>' : ''}
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Level</h2><span class="aside meta">Sets xp progress within the level to 0</span></div>
+    <div class="level-row">
+      <input type="range" min="1" max="${S.maxLevel}" data-k="level" value="${d.level}" aria-label="Level">
+      <input type="number" min="1" max="${S.maxLevel}" data-k="level" value="${d.level}" aria-label="Level">
+    </div>
+  </div>
+  <div class="card">
+    <div class="cols">
+      <label class="f">Mode<select data-k="hardcore"><option value="false" ${!d.hardcore ? 'selected' : ''}>Softcore</option><option value="true" ${d.hardcore ? 'selected' : ''}>Hardcore</option></select></label>
+      <label class="f">Trading<select data-k="solo"><option value="false" ${!d.solo ? 'selected' : ''}>Standard</option><option value="true" ${d.solo ? 'selected' : ''}>Solo Challenge</option></select></label>
+    </div>
+    ${d.hardcore !== !!c.hardcore || d.solo !== !!c.solo ? '<p class="note warn">Changing mode or trading moves the character to a different stash in game.</p>' : ''}
+  </div>`;
+}
+
+// ---------- Progression tab ----------
+function progressionTab(c, d) {
+  const max = maxPassives(d.level);
+  const allocated = d['reset-passives'] ? 0 : c.passivesSpent;
+  const unspent = d['grant-all-passives'] ? Math.max(0, max - allocated) : Number(d['passive-points']);
+  const idolDone = c.idolQuestList.filter((q) => q.done).length;
+  const idolAll = idolDone === c.idolQuestList.length;
+  const maxXp = S.maxSkillXp;
+  const allMaxed = c.skillTrees.every((t) => t.xp >= maxXp);
+  const preset = S.presets.find((p) => p.name === d.preset);
+  return `
+  <div class="card">
+    <div class="card-head"><h2>Passives</h2>
+      <span class="help" title="1 point per level from level 3, plus up to ${S.questPassiveCap} from quests (the game caps quest rewards at ${S.questPassiveCap}). That's ${max} at level ${d.level}.">?</span>
+      <div class="aside">
+        ${actionBtn('grant-passives', `Grant all (${max})`, d['grant-all-passives'], `All points: ${unspent} unspent`)}
+        ${actionBtn('reset-passives', 'Reset tree', d['reset-passives'], 'Tree reset', { disabled: c.passivesSpent === 0 })}
+      </div>
+    </div>
+    <div class="kv">
+      <div><div class="v">${c.passivesSpent}${d['reset-passives'] ? ' <span class="to">→ 0</span>' : ''}</div><div class="k">allocated</div></div>
+      <div><div class="v">${c.unspentPoints}${unspent !== c.unspentPoints ? ` <span class="to">→ ${unspent}</span>` : ''}</div><div class="k">unspent</div></div>
+      <div><div class="v">${max}</div><div class="k">max at level ${d.level}</div></div>
+      <label class="f" style="margin-left:auto;width:150px">Set unspent to<input type="number" min="0" data-k="passive-points" value="${d['grant-all-passives'] ? '' : esc(d['passive-points'])}" placeholder="${d['grant-all-passives'] ? unspent : ''}" ${d['grant-all-passives'] ? 'disabled' : ''}></label>
+    </div>
+  </div>
+
+  ${skillsCard(c, d)}
+
+  <div class="card">
+    <div class="card-head"><h2>Idol slots</h2><span class="meta">${d['unlock-idols'] ? c.idolQuestList.length : idolDone}/${c.idolQuestList.length} quests done</span>
+      <span class="help" title="The game counts idol slots from completed quests. Unlocking marks those quests done, including three main-story ones.">?</span>
+      <div class="aside">${actionBtn('unlock-idols', 'Unlock all', d['unlock-idols'], 'All idol slots', { disabled: idolAll })}</div>
+    </div>
+    <details class="more"><summary>Show quests</summary>
+      <div class="chips">${c.idolQuestList.map((q) => `<span class="chip ${q.done || d['unlock-idols'] ? 'done' : ''}" title="Chapter ${q.chapter} ${q.main ? 'main' : 'side'} quest">${q.done || d['unlock-idols'] ? '✓' : '○'} ${esc(q.name)}</span>`).join('')}</div>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h2>Campaign & endgame</h2><span class="meta">${c.quests} quests · ${c.waypoints} waypoints · ${c.monolithQuests} monolith quests</span></div>
+    <label class="f" style="max-width:380px">Apply progression preset
+      <select data-k="preset"><option value="">—</option>${S.presets.map((p) => `<option value="${esc(p.name)}" ${p.name === d.preset ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select>
+    </label>
+    ${preset ? `<div class="checks" style="margin-top:10px">${S.groups.map((g) => {
+      const has = preset.groups.includes(g);
+      return `<label><input type="checkbox" data-group="${g}" ${has && d.groups.includes(g) ? 'checked' : ''} ${has ? '' : 'disabled'}> ${GROUP_LABELS[g] || g}</label>`;
+    }).join('')}</div>
+    ${preset.saveVersion !== c.saveVersion ? `<p class="note warn">Captured from a v${esc(preset.saveVersion)} save; this character is v${esc(c.saveVersion)}, so some quests may not line up.</p>` : ''}` : ''}
+  </div>
+
+  ${factionCard(c, d)}`;
+}
+
+// ---------- skills ----------
+const EMPTY_ABILITY = 'na28', BASIC_ATTACK = 'ba1', SKILL_SLOTS = 5;
+const skillName = (c, id) => id === EMPTY_ABILITY ? 'Empty' : id === BASIC_ATTACK ? 'Basic attack' : c.classSkills.find((s) => s.id === id)?.name ?? id;
+
+// Specialized skill per slot (0-4) after pending changes.
+function slotSkills(c, d) {
+  const out = Array(SKILL_SLOTS).fill('');
+  for (const t of c.skillTrees) out[t.slot] = t.id;
+  for (const [slot, id] of Object.entries(d['skill-slots'])) out[slot] = id;
+  return out;
+}
+const currentBar = (c, d) => d['ability-bar'] ?? [...c.abilityBar];
+
+// Mirrors the server: when a slot's skill changes, the new skill takes the old
+// one's hotbar button, or the first empty one; clearing a slot empties its button.
+function setSlot(c, slot, id) {
+  const before = slotSkills(c, draft)[slot];
+  if (before === id) return;
+  const original = c.skillTrees.find((t) => t.slot === slot)?.id ?? '';
+  if (id === original) delete draft['skill-slots'][slot]; else draft['skill-slots'][slot] = id;
+  const bar = currentBar(c, draft);
+  const at = before ? bar.indexOf(before) : -1;
+  if (id && !bar.includes(id)) { const free = at >= 0 ? at : bar.indexOf(EMPTY_ABILITY); if (free >= 0) bar[free] = id; }
+  else if (!id && at >= 0) bar[at] = EMPTY_ABILITY;
+  draft['ability-bar'] = bar.join() === c.abilityBar.join() ? null : bar;
+}
+
+function skillOptions(c, d, value, { forBar = false } = {}) {
+  const cls = S.classes[c.classId];
+  const taken = new Set(forBar ? currentBar(c, d) : slotSkills(c, d));
+  const opt = (s) => {
+    const locked = s.mastery && s.mastery !== Number(d.mastery);
+    const used = taken.has(s.id) && s.id !== value;
+    return `<option value="${s.id}" ${s.id === value ? 'selected' : ''} ${locked || used ? 'disabled' : ''}>${esc(s.name)}${locked ? ` · needs ${esc(cls.masteries[s.mastery])}` : used ? ' · in use' : ''}</option>`;
+  };
+  const groups = [0, 1, 2, 3].map((m) => {
+    const list = c.classSkills.filter((s) => s.mastery === m).sort((a, b) => a.name.localeCompare(b.name));
+    return list.length ? `<optgroup label="${esc(m ? cls.masteries[m] : cls.name)}">${list.map(opt).join('')}</optgroup>` : '';
+  });
+  // The chosen mastery's group first, other masteries last.
+  const order = [0, Number(d.mastery), ...[1, 2, 3].filter((m) => m !== Number(d.mastery))].filter((m, i, a) => a.indexOf(m) === i);
+  const lead = forBar
+    ? `<option value="${EMPTY_ABILITY}" ${value === EMPTY_ABILITY ? 'selected' : ''}>Empty</option><option value="${BASIC_ATTACK}" ${value === BASIC_ATTACK ? 'selected' : ''}>Basic attack</option>`
+    : `<option value="" ${!value ? 'selected' : ''}>Empty slot</option>`;
+  return lead + order.map((m) => groups[m]).join('');
+}
+
+function skillsCard(c, d) {
+  const maxXp = S.maxSkillXp;
+  const slots = slotSkills(c, d);
+  const bar = currentBar(c, d);
+  const allMaxed = c.skillTrees.every((t) => t.xp >= maxXp);
+  const invalid = slots.filter((id) => { const s = c.classSkills.find((x) => x.id === id); return s?.mastery && s.mastery !== Number(d.mastery); });
+  const rows = slots.map((id, slot) => {
+    const tree = c.skillTrees.find((t) => t.slot === slot);
+    const isNew = id && id !== tree?.id;
+    const xp = !id ? 0 : isNew ? maxXp : d['skill-xp'] ?? tree.xp;
+    const onBar = id && bar.includes(id);
+    return `<div class="skill" style="grid-template-columns:22px minmax(170px, 240px) 1fr 70px 74px">
+      <span class="muted small">${slot + 1}</span>
+      <select data-skill-slot="${slot}" class="${d['skill-slots'][slot] !== undefined ? 'changed' : ''}">${skillOptions(c, d, id)}</select>
+      <div class="bar">${id ? `<i style="width:${Math.min(100, (xp / maxXp) * 100)}%"></i>` : ''}</div>
+      <span class="x">${!id ? '' : isNew ? 'New · max' : xp >= maxXp ? 'Max' : `${Math.round((xp / maxXp) * 100)}%`}</span>
+      <span class="small ${onBar ? '' : 'muted'}" title="${onBar ? `Hotbar button ${bar.indexOf(id) + 1}` : 'Not on the hotbar'}">${!id ? '' : onBar ? `⌨ ${bar.indexOf(id) + 1}` : 'not on bar'}</span>
+    </div>`;
+  }).join('');
+  return `<div class="card">
+    <div class="card-head"><h2>Skills</h2>
+      <span class="help" title="The 5 specialization slots. A newly chosen skill starts fully levelled with 20 points to spend in its tree. Changing a skill takes its hotbar button.">?</span>
+      <div class="aside">${c.skillTrees.length ? actionBtn('max-skills', 'Max all', d['skill-xp'] !== null, 'All skills maxed', { disabled: allMaxed, title: `Sets every skill to ${fmt(maxXp)} xp` }) : ''}</div>
+    </div>
+    <div class="skills">${rows}</div>
+    ${invalid.length ? `<p class="note warn">${invalid.map((id) => esc(skillName(c, id))).join(', ')} need${invalid.length === 1 ? 's' : ''} a different mastery; pick another skill or mastery.</p>` : ''}
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
+      <div class="small muted" style="margin-bottom:8px">Hotbar</div>
+      <div style="display:grid;grid-template-columns:repeat(${SKILL_SLOTS}, minmax(0, 1fr));gap:8px">
+        ${bar.map((id, i) => `<select data-bar="${i}" title="Button ${i + 1}" class="${d['ability-bar'] && d['ability-bar'][i] !== c.abilityBar[i] ? 'changed' : ''}">${skillOptions(c, d, id, { forBar: true })}</select>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function factionCard(c, d) {
+  const joining = d['join-faction'] !== '' ? S.factionList.find((f) => f.id === Number(d['join-faction'])) : null;
+  const rows = c.factions.map((f) => {
+    const rank = d['faction-rank'][f.id] ?? f.rank;
+    const favor = d['faction-favor'][f.id] ?? f.favor;
+    const leaving = joining?.excludes.includes(f.id) && f.isMember;
+    return `<div class="faction" style="${leaving ? 'opacity:.45' : ''}">
+      <div><div style="font-weight:600">${esc(f.name)}</div><div class="small muted">${f.isMember && !leaving ? 'Member' : 'Not a member'} · ${fmt(f.reputation)} rep</div></div>
+      <label class="f">Rank<span style="display:flex;gap:6px">
+        <select data-faction-rank="${f.id}" class="${d['faction-rank'][f.id] !== undefined && d['faction-rank'][f.id] !== f.rank ? 'changed' : ''}">${Array.from({ length: f.maxRank }, (_, i) => `<option value="${i + 1}" ${i + 1 === rank ? 'selected' : ''}>${i + 1}${i + 1 === f.maxRank ? ' (max)' : ''}</option>`).join('')}</select>
+        <button class="btn sm" data-faction-max="${f.id}" ${rank === f.maxRank ? 'disabled' : ''}>Max</button></span></label>
+      <label class="f">Favor<input type="number" min="0" max="2000000000" data-faction-favor="${f.id}" value="${favor}" list="favorPresets" class="${d['faction-favor'][f.id] !== undefined && d['faction-favor'][f.id] !== f.favor ? 'changed' : ''}"></label>
+    </div>`;
+  }).join('');
+  const joinable = S.factionList.filter((f) => !c.factions.some((j) => j.id === f.id && j.isMember));
+  const canJoin = (f) => f.canJoin || c.factions.some((j) => j.id === f.id);
+  return `<div class="card">
+    <div class="card-head"><h2>Factions</h2>
+      <span class="help" title="Rank and reputation are shared through the stash with other characters; the tool only ever raises them there. A faction can be joined here once any character has joined it in game.">?</span>
+      ${joinable.length ? `<div class="aside"><select data-k="join-faction" style="width:auto">
+        <option value="">Join a faction…</option>${joinable.map((f) => `<option value="${f.id}" ${canJoin(f) ? '' : 'disabled'} ${String(f.id) === String(d['join-faction']) ? 'selected' : ''}>${esc(f.name)}${canJoin(f) ? '' : ' (join in game first)'}</option>`).join('')}
+      </select></div>` : ''}
+    </div>
+    <datalist id="favorPresets"><option value="100000"><option value="1000000"><option value="10000000"></datalist>
+    ${c.factions.length ? `<div class="rows">${rows}</div>` : '<p class="note" style="margin:0">Not in a faction.</p>'}
+    ${joining ? `<p class="note">Joins ${esc(joining.name)} at rank 1 when you save; you can set its rank afterwards.</p>` : ''}
+  </div>`;
+}
+
+// ---------- Gear tab ----------
+async function ensure(cache, key, url) {
+  if (cache[key]) return;
+  cache[key] = { loading: true };
+  try { cache[key] = await api('GET', url); } catch (e) { cache[key] = { error: e.message }; }
+  if (selected === key) refresh();
+}
+
+function itemHtml(it) {
+  const color = RARITY_COLORS[it.rarity] ?? RARITY_COLORS.Normal;
+  const extra = [
+    it.name !== it.typeName ? esc(it.typeName) : '',
+    it.uniqueRollPct != null ? `rolls ${it.uniqueRollPct}%` : '',
+    it.potential !== undefined ? `${esc(it.potentialLabel === "Weaver's Will" ? 'WW' : 'LP')} ${it.potential}` : '',
+  ].filter(Boolean).join(' · ');
+  const affixes = (it.affixes || []).map((a) => `<div class="affix"><span class="t" style="${a.tier >= 6 ? `color:${RARITY_COLORS.Exalted}` : ''}">T${a.tier}</span>${esc(a.text)}</div>`).join('');
+  return `<div><span class="item-name" style="color:${color};font-weight:600">${esc(it.name)}</span>${extra ? ` <span class="small muted">${extra}</span>` : ''}</div>${affixes}`;
+}
+
+function gearTab(c, d) {
+  const g = gearCache[c.slot];
+  if (!g || g.loading) { ensure(gearCache, c.slot, `/api/characters/${c.slot}/gear`); return '<div class="card"><p class="note" style="margin:0">Loading gear…</p></div>'; }
+  if (g.error) return `<div class="card"><p class="note warn" style="margin:0">${esc(g.error)}</p></div>`;
+  const noDb = !S.itemDb.loaded ? `<div class="card"><p class="note warn" style="margin:0">Item data unavailable (${esc(S.itemDb.error ?? 'unknown error')}), so items show as ids and the creator is off. <button class="btn sm" onclick="openItemDataDialog()">Get item data</button></p></div>` : '';
+  const replacingGear = d['gear-source'] && d['gear-groups'].includes('gear');
+  const replacingIdols = d['gear-source'] && d['gear-groups'].includes('idols');
+  const rows = g.equipped.map((e) => {
+    const removing = d['remove-gear'].includes(e.containerID) || d['clear-items'];
+    const staged = d['create-items'].find((x) => x.containerID === e.containerID);
+    const body = staged
+      ? `<div class="new-badge">NEW</div>${itemHtml(staged.preview)}${e.item ? `<div class="small muted">replaces ${esc(e.item.name)}</div>` : ''}`
+      : e.item ? itemHtml(e.item) : '<span class="empty-slot">Empty</span>';
+    const actions = replacingGear || d['clear-items'] ? '' : staged
+      ? `<button class="btn sm" data-unstage="${e.containerID}">Undo</button>`
+      : `${S.itemDb.loaded ? `<button class="btn sm ghost" data-create-slot="${e.containerID}" title="Create an item for this slot">${e.item ? 'Replace' : '＋ Create'}</button>` : ''}${e.item ? `<button class="btn sm ghost" data-remove-gear="${e.containerID}" title="${removing ? 'Keep' : 'Remove'}">${removing ? 'Keep' : 'Remove'}</button>` : ''}`;
+    return `<div class="slot-row ${removing || replacingGear ? 'removing' : ''}"><div class="slot">${esc(e.slot)}</div><div style="min-width:0">${body}</div><div class="row-actions">${actions}</div></div>`;
+  }).join('');
+  const others = S.characters.filter((x) => !x.error && x.slot !== c.slot);
+  return `${noDb}
+  <div class="card">
+    <div class="card-head"><h2>Equipment</h2>
+      <div class="aside">
+        <select data-k="gear-source" style="width:auto" title="Replace gear with a saved loadout or another character's gear">
+          <option value="">Load gear from…</option>
+          ${S.loadouts.length ? `<optgroup label="Loadouts">${S.loadouts.map((l) => `<option value="loadout:${esc(l.name)}" ${d['gear-source'] === `loadout:${l.name}` ? 'selected' : ''}>${esc(l.name)}</option>`).join('')}</optgroup>` : ''}
+          <optgroup label="Characters">${others.map((x) => `<option value="char:${x.slot}" ${d['gear-source'] === `char:${x.slot}` ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</optgroup>
+        </select>
+        <button class="btn sm" data-act="save-loadout">Save as loadout</button>
+      </div>
+    </div>
+    ${d['gear-source'] ? `<div class="checks" style="margin:-4px 0 10px">${S.gearGroups.map((gr) => `<label><input type="checkbox" data-gear-group="${gr}" ${d['gear-groups'].includes(gr) ? 'checked' : ''}> ${GEAR_GROUP_LABELS[gr]}</label>`).join('')}</div>` : ''}
+    <div class="rows">${rows}</div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Idols</h2><span class="meta">Click ＋ to create one, or an idol to remove it</span></div>
+    ${idolGridHtml(g, d, replacingIdols || d['clear-items'])}
+    ${g.blessings.length ? `<p class="note">Blessings: ${g.blessings.map((b) => esc(b.name)).join(', ')}</p>` : ''}
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Inventory</h2><span class="meta">${c.items} items equipped or carried</span>
+      <div class="aside">${actionBtn('clear-items', 'Remove all items', d['clear-items'], 'All items removed', { disabled: !c.items, title: 'Removes equipment and inventory. The stash is untouched.' })}</div>
+    </div>
+    <p class="note" style="margin:0">Anything removed or replaced is kept as a loadout, so you can put it back.</p>
+  </div>`;
+}
+
+// ---------- idol grid ----------
+const IDOL_GRID = 5;
+const isIdolCell = (x, y) => x >= 0 && y >= 0 && x < IDOL_GRID && y < IDOL_GRID && !((x === 0 || x === 4) && (y === 0 || y === 4)) && !(x === 2 && y === 2);
+
+function idolLayout(g, d) {
+  const removing = new Set(d['remove-idols']);
+  return [
+    ...g.idols.map((it) => ({ x: it.position.x, y: it.position.y, size: it.size, item: it, removing: removing.has(`${it.position.x}:${it.position.y}`) })),
+    ...d['create-items'].filter((x) => x.containerID === 29).map((x) => ({ x: x.position.x, y: x.position.y, size: x.preview.size, item: x.preview, staged: true })),
+  ];
+}
+function takenCells(layout) {
+  const taken = new Set();
+  for (const p of layout) if (!p.removing) for (let dx = 0; dx < p.size.x; dx++) for (let dy = 0; dy < p.size.y; dy++) taken.add(`${p.x + dx},${p.y + dy}`);
+  return taken;
+}
+function idolFits(size, pos) {
+  if (!pos || !size) return false;
+  const g = gearCache[current().slot];
+  const taken = g && !g.error && !g.loading ? takenCells(idolLayout(g, draft)) : new Set();
+  for (let dx = 0; dx < size.x; dx++) for (let dy = 0; dy < size.y; dy++) {
+    if (!isIdolCell(pos.x + dx, pos.y + dy) || taken.has(`${pos.x + dx},${pos.y + dy}`)) return false;
+  }
+  return true;
+}
+
+function idolGridHtml(g, d, locked) {
+  const layout = idolLayout(g, d);
+  const taken = takenCells(layout);
+  const cells = [];
+  for (let y = 0; y < IDOL_GRID; y++) for (let x = 0; x < IDOL_GRID; x++) {
+    const pos = `grid-column:${x + 1};grid-row:${y + 1}`;
+    if (!isIdolCell(x, y)) cells.push(`<div style="${pos}"></div>`);
+    else if (taken.has(`${x},${y}`) || locked || !S.itemDb.loaded) cells.push(`<div style="${pos};border:1px solid var(--line);border-radius:5px;background:var(--bg)"></div>`);
+    else cells.push(`<button class="btn" data-idol-cell="${x}:${y}" title="Create an idol here" style="${pos};padding:0;border-style:dashed;color:var(--faint);font-size:17px;background:var(--bg)">＋</button>`);
+  }
+  const pieces = layout.map((p) => {
+    const color = RARITY_COLORS[p.item.rarity] ?? RARITY_COLORS.Normal;
+    const tip = [p.item.name, ...(p.item.affixes ?? []).map((a) => `T${a.tier} ${a.text}`), p.staged ? '(new, click to undo)' : p.removing ? '(click to keep)' : '(click to remove)'].join('\n');
+    const attr = p.staged ? `data-unstage-idol="${p.x}:${p.y}"` : `data-idol="${p.x}:${p.y}"`;
+    return `<button class="btn" ${attr} ${locked ? 'disabled' : ''} title="${esc(tip)}" style="grid-column:${p.x + 1} / span ${p.size.x};grid-row:${p.y + 1} / span ${p.size.y};padding:2px;z-index:1;border:2px ${p.staged ? 'dashed var(--gold)' : `solid ${color}`};background:color-mix(in srgb, ${color} 16%, var(--panel-2));font-size:10px;line-height:1.1;overflow:hidden;${p.removing || locked ? 'opacity:.35;' : ''}">${esc(p.staged ? 'NEW' : p.item.name.split(' ')[0])}</button>`;
+  }).join('');
+  const list = layout.filter((p) => !p.removing).map((p) => `<div>${p.staged ? '<span class="new-badge">NEW </span>' : ''}${itemHtml(p.item)}</div>`).join('');
+  return `<div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start">
+    <div style="display:grid;grid-template-columns:repeat(5, 44px);grid-template-rows:repeat(5, 44px);gap:3px;flex:none">${cells.join('')}${pieces}</div>
+    <div style="display:grid;gap:8px;flex:1;min-width:240px">${list || '<span class="note" style="margin:0">No idols.</span>'}</div>
+  </div>`;
+}
+
+// ---------- Stash tab ----------
+function stashTab(c, d) {
+  const info = c.goldInfo;
+  if (!info.stashId) return `<div class="card"><p class="note warn" style="margin:0">${esc(info.missing)}</p></div>`;
+  const m = materialsCache[c.slot];
+  if (!m) ensure(materialsCache, c.slot, `/api/characters/${c.slot}/materials`);
+  const shared = info.sharedWith.length
+    ? `Shared with ${info.sharedWith.length} other character${info.sharedWith.length === 1 ? '' : 's'}: <span class="muted">${info.sharedWith.map(esc).join(', ')}</span>`
+    : 'Only this character uses this stash.';
+  const matCard = !m || m.loading ? '<p class="note" style="margin:0">Loading…</p>' : m.error || m.missing ? `<p class="note warn" style="margin:0">${esc(m.error || m.missing)}</p>` : `
+    <div class="kv">
+      ${[['Runes', m.runes.total], ['Glyphs', m.glyphs.total], ['Affix shards', m.shards.total], ['Keys', m.keys.total], ...(m.ancientBones !== null ? [['Ancient Bones', m.ancientBones]] : [])]
+        .map(([k, v]) => `<div><div class="v">${fmt(v)}</div><div class="k">${k}</div></div>`).join('')}
+    </div>
+    <div class="cols" style="margin-top:16px">
+      ${MATERIALS.map(([k, label]) => `<label class="f">${label}: at least<input type="number" min="1" max="999999" placeholder="No change" data-k="${k}" value="${d[k]}"></label>`).join('')}
+      <label class="f">Ancient Bones<input type="number" min="0" placeholder="No change" data-k="ancient-bones" value="${d['ancient-bones']}"></label>
+    </div>
+    <div class="checks" style="margin-top:12px"><label><input type="checkbox" data-k="special-materials" ${d['special-materials'] ? 'checked' : ''}> Include special types <span class="help" title="Rune of Weaving, Glyph of Insight, Primordial items and other types that don't drop normally.">?</span></label></div>`;
+  return `
+  <div class="card" style="background:var(--panel-2)">
+    <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><strong>Stash ${esc(info.stashId)}</strong><span class="small">${shared}</span></div>
+    <p class="note" style="margin:6px 0 0">Gold and materials belong to the stash, so every character on it gets these changes. Material amounts only go up.</p>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Gold</h2><span class="meta">${fmt(info.gold)} now</span></div>
+    <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">
+      <label class="f" style="width:220px">Set gold<input type="number" min="0" max="${S.maxGold}" step="1" data-k="gold" value="${d.gold}"></label>
+      ${[1e6, 1e8, 1e9].map((n) => `<button class="btn sm" data-gold="${n}">${short(n)}</button>`).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h2>Crafting materials</h2><div class="aside"><button class="btn sm" data-act="fill-materials" title="999 of every rune, glyph and shard; 99 of every key">Fill everything</button></div></div>
+    ${matCard}
+  </div>`;
+}
+
+// ---------- events: main area ----------
+$('#content').addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.dataset.factionRank !== undefined) { draft['faction-rank'][el.dataset.factionRank] = Number(el.value); return refresh(); }
+  if (el.dataset.factionFavor !== undefined) { draft['faction-favor'][el.dataset.factionFavor] = el.value === '' ? '' : Number(el.value); el.classList.add('changed'); renderPending(); renderHead(current()); return; }
+  if (el.dataset.skillSlot !== undefined) { setSlot(current(), Number(el.dataset.skillSlot), el.value); return refresh(); }
+  if (el.dataset.bar !== undefined) {
+    const c = current(), bar = currentBar(c, draft);
+    bar[Number(el.dataset.bar)] = el.value;
+    draft['ability-bar'] = bar.join() === c.abilityBar.join() ? null : bar;
+    return refresh();
+  }
+  if (el.dataset.gearGroup) { draft['gear-groups'] = [...document.querySelectorAll('#content [data-gear-group]:checked')].map((x) => x.dataset.gearGroup); return refresh(); }
+  if (el.dataset.group) { draft.groups = [...document.querySelectorAll('#content [data-group]:checked')].map((x) => x.dataset.group); renderPending(); return; }
+  const k = el.dataset.k;
+  if (!k) return;
+  let v = el.type === 'checkbox' ? el.checked : el.value;
+  if (k === 'hardcore' || k === 'solo') v = v === 'true';
+  if (['class', 'mastery', 'level', 'passive-points', 'gold', 'runes', 'glyphs', 'shards', 'keys', 'ancient-bones'].includes(k)) v = v === '' ? '' : Number(v);
+  if (k === 'level') {
+    v = Math.max(1, Math.min(S.maxLevel, v || 1));
+    document.querySelectorAll('#content [data-k=level]').forEach((x) => { if (x !== el) x.value = v; });
+  }
+  draft[k] = v;
+  if (k === 'class') draft.mastery = 0;
+  if (k === 'preset') draft.groups = v ? [...S.presets.find((p) => p.name === v).groups] : [...S.groups];
+  // Structural changes re-render; typing just updates the chrome so focus stays put.
+  if (['class', 'hardcore', 'solo', 'preset', 'gear-source', 'join-faction', 'special-materials'].includes(k)) return refresh();
+  markChanged();
+  renderPending();
+  renderHead(current());
+});
+// Level-dependent numbers update once the slider is released or the box committed.
+$('#content').addEventListener('change', (e) => { if (e.target.dataset.k === 'level') refresh(); });
+
+$('#head').addEventListener('click', async (e) => {
+  const t = e.target.closest('[data-tab]');
+  if (t) { tab = t.dataset.tab; $('#content').scrollTop = 0; return refresh(); }
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (!act) return;
+  e.target.closest('details')?.removeAttribute('open');
+  const c = current();
+  if (act === 'build-ready') {
+    Object.assign(draft, { level: S.maxLevel, 'grant-all-passives': true });
+    if (c.idolQuestList.some((q) => !q.done)) draft['unlock-idols'] = true;
+    if (c.skillTrees.some((t) => t.xp < S.maxSkillXp)) draft['skill-xp'] = S.maxSkillXp;
+    if (draft.mastery === 0) draft.mastery = 1;
+    for (const f of c.factions) if (f.isMember && f.rank < f.maxRank) draft['faction-rank'][f.id] = f.maxRank;
+    if (c.goldInfo.stashId) for (const [k, , n] of MATERIALS) draft[k] = n;
+    refresh();
+    toast('Queued build-ready changes. Review them below, then save.');
+  }
+  if (act === 'import') openImportDialog();
+  if (act === 'clone') openClone();
+  if (act === 'capture') openCapture();
+  if (act === 'delete') {
+    if (!(await confirmBox(`Delete ${c.name}?`, 'The save moves to the backups folder, so it can be restored.', 'Delete', true))) return;
+    try { await api('DELETE', `/api/characters/${c.slot}`); toast(`Deleted ${c.name}.`); selected = null; await load(); }
+    catch (err) { toast(err.message, 'error'); }
+  }
+});
+document.addEventListener('click', (e) => { for (const m of document.querySelectorAll('details.menu[open]')) if (!m.contains(e.target)) m.removeAttribute('open'); });
+
+$('#content').addEventListener('click', (e) => {
+  const c = current();
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  const toggle = (k, on) => { draft[k] = on; refresh(); };
+  if (act === 'grant-passives') return toggle('grant-all-passives', !draft['grant-all-passives']);
+  if (act === 'reset-passives') return toggle('reset-passives', !draft['reset-passives']);
+  if (act === 'unlock-idols') return toggle('unlock-idols', !draft['unlock-idols']);
+  if (act === 'clear-items') return toggle('clear-items', !draft['clear-items']);
+  if (act === 'max-skills') { draft['skill-xp'] = draft['skill-xp'] === null ? S.maxSkillXp : null; return refresh(); }
+  if (act === 'fill-materials') { for (const [k, , n] of MATERIALS) draft[k] = n; return refresh(); }
+  if (act === 'save-loadout') return openLoadoutDialog();
+  const pick = (sel) => e.target.closest(sel);
+  let el;
+  if ((el = pick('[data-gold]'))) { draft.gold = Number(el.dataset.gold); return refresh(); }
+  if ((el = pick('[data-faction-max]'))) { const f = c.factions.find((x) => x.id === Number(el.dataset.factionMax)); draft['faction-rank'][f.id] = f.maxRank; return refresh(); }
+  if ((el = pick('[data-create-slot]'))) return openItemDialog(Number(el.dataset.createSlot));
+  if ((el = pick('[data-unstage]'))) { draft['create-items'] = draft['create-items'].filter((x) => x.containerID !== Number(el.dataset.unstage)); return refresh(); }
+  if ((el = pick('[data-remove-gear]'))) {
+    const cid = Number(el.dataset.removeGear);
+    draft['remove-gear'] = draft['remove-gear'].includes(cid) ? draft['remove-gear'].filter((x) => x !== cid) : [...draft['remove-gear'], cid];
+    return refresh();
+  }
+  if ((el = pick('[data-idol-cell]'))) { const [x, y] = el.dataset.idolCell.split(':').map(Number); return openItemDialog(29, { x, y }); }
+  if ((el = pick('[data-idol]'))) {
+    const k = el.dataset.idol;
+    draft['remove-idols'] = draft['remove-idols'].includes(k) ? draft['remove-idols'].filter((x) => x !== k) : [...draft['remove-idols'], k];
+    return refresh();
+  }
+  if ((el = pick('[data-unstage-idol]'))) {
+    draft['create-items'] = draft['create-items'].filter((x) => !(x.containerID === 29 && `${x.position.x}:${x.position.y}` === el.dataset.unstageIdol));
+    return refresh();
+  }
+});
+
+// ---------- pending bar ----------
+$('#pendingList').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-undo]');
+  if (!b) return;
+  changeList()[Number(b.dataset.undo)]?.undo();
+  refresh();
+});
+$('#discardBtn').onclick = () => { draft = null; render(); };
+$('#saveBtn').onclick = save;
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (isDirty() && !$('#saveBtn').disabled && !document.querySelector('dialog[open]')) save(); }
+});
+
+async function save() {
+  const c = current();
+  const ch = changes();
+  if (!Object.keys(ch).length) return;
+  const big = [];
+  if (ch.loadout || ch['copy-gear-from'] !== undefined) big.push('replaces gear (the current items are kept as a loadout)');
+  if (ch.preset) big.push(`replaces ${ch.groups.map((g) => GROUP_LABELS[g].toLowerCase()).join(', ')} progress with “${ch.preset}”`);
+  if (ch['clear-items']) big.push('removes all items');
+  if (ch['import-build']) big.push('imports the build (replaced gear is kept as a loadout)');
+  if (big.length && !(await confirmBox('Save these changes?', `This ${big.join(', and ')}. A backup is kept either way.`, 'Save'))) return;
+  $('#saveBtn').disabled = true;
+  try {
+    const r = await api('POST', `/api/characters/${c.slot}`, ch);
+    const notes = [...(r.warnings || []).filter((w) => !/^Replaced items kept/.test(w))];
+    const sharedWith = r.gold?.sharedWith?.length ? r.gold.sharedWith : r.materials?.sharedWith?.length ? r.materials.sharedWith : r.factionsShared;
+    if (sharedWith?.length) notes.push(`Stash changes also apply to ${sharedWith.join(', ')}.`);
+    if (r.stashNote) notes.push(r.stashNote);
+    toast(`Saved ${ch.name ?? c.name}.`, notes.length ? 'warn' : 'ok', notes);
+    await load();
+  } catch (err) { toast(err.message, 'error'); }
+  finally { renderPending(); }
+}
+
+// ---------- dialogs ----------
+function formData(form) {
+  const o = {};
+  for (const el of form.elements) {
+    if (!el.name || el.disabled) continue;
+    if (el.name === 'groups') { if (el.checked) (o.groups ||= []).push(el.value); continue; }
+    if (el.type === 'checkbox') { if (el.checked) o[el.name] = true; continue; }
+    if (el.value === '') continue;
+    if (el.value === 'true') o[el.name] = true;
+    else o[el.name] = el.type === 'number' || (el.tagName === 'SELECT' && el.name !== 'preset') ? Number(el.value) : el.value;
+  }
+  return o;
+}
+
+function wireDialog(dlg, submit) {
+  $('form', dlg).addEventListener('submit', async (e) => {
+    if (e.submitter?.value !== 'ok') return;
+    e.preventDefault();
+    try { await submit(formData(e.currentTarget)); dlg.close(); } catch (err) { toast(err.message, 'error'); }
+  });
+}
+
+const groupChecks = (available, name = 'groups') => S.groups.map((g) => {
+  const on = !available || available.includes(g);
+  return `<label><input type="checkbox" name="${name}" value="${g}" ${on ? 'checked' : 'disabled'}> ${GROUP_LABELS[g] || g}</label>`;
+}).join('');
+
+// New character
+$('#newBtn').onclick = async () => {
+  if (isDirty() && !(await confirmBox('Discard changes?', 'You have unsaved changes to this character.', 'Discard', true))) return;
+  const f = $('#newForm');
+  f.reset();
+  const cls = f.elements.class;
+  if (!cls.options.length) cls.innerHTML = S.classes.map((c, i) => `<option value="${i}">${esc(c.name)}</option>`).join('');
+  f.elements.mastery.innerHTML = masteryOptions(cls.value, 1);
+  f.elements.preset.innerHTML = '<option value="">None</option>' + S.presets.map((p) => `<option value="${esc(p.name)}">${esc(p.name)}</option>`).join('');
+  f.elements.preset.value = (S.presets.find((p) => /campaign/i.test(p.name)) ?? S.presets[0])?.name ?? '';
+  $('[data-groups]', f).dataset.for = '';
+  syncNewForm(f);
+  $('#newDlg').showModal();
+  f.elements.name.focus();
+};
+function syncNewForm(f) {
+  const p = S.presets.find((x) => x.name === f.elements.preset.value);
+  const box = $('[data-groups]', f);
+  if (box.dataset.for !== (p?.name ?? '')) { box.innerHTML = p ? groupChecks(p.groups) : ''; box.dataset.for = p?.name ?? ''; }
+  const grant = f.elements['grant-all-passives'].checked;
+  const level = Math.max(1, Math.min(S.maxLevel, Number(f.elements.level.value) || 1));
+  f.elements['passive-points'].disabled = grant;
+  if (grant) f.elements['passive-points'].value = maxPassives(level);
+  $('#newHint').textContent = `Level ${level}` + [grant && `${maxPassives(level)} passive points`, f.elements['unlock-idols'].checked && 'all idol slots', p && `progression from “${p.name}”`].filter(Boolean).map((x) => ` · ${x}`).join('');
+}
+$('#newForm').addEventListener('input', (e) => {
+  const f = e.currentTarget;
+  if (e.target.name === 'class') f.elements.mastery.innerHTML = masteryOptions(e.target.value, 1);
+  syncNewForm(f);
+});
+wireDialog($('#newDlg'), async (o) => {
+  const r = await api('POST', '/api/characters', o);
+  const notes = (r.warnings || []).filter((w) => !/unspent passive|came from save version/.test(w));
+  toast(`Created ${o.name}.`, notes.length ? 'warn' : 'ok', notes);
+  selected = r.slot;
+  tab = 'character';
+  await load();
+});
+
+// Clone
+function openClone() {
+  const c = current(), f = $('#cloneForm');
+  f.reset();
+  f.elements.name.value = `${c.name}2`.slice(0, 30);
+  f.elements.level.value = c.level;
+  $('#cloneDlg').showModal();
+  f.elements.name.select();
+}
+wireDialog($('#cloneDlg'), async (o) => {
+  const c = current();
+  if (o.level === c.level) delete o.level;
+  const r = await api('POST', `/api/characters/${c.slot}/clone`, o);
+  toast(`Cloned as ${o.name}.`, r.warnings?.length ? 'warn' : 'ok', r.warnings || []);
+  selected = r.slot;
+  await load();
+});
+
+// Presets & loadouts
+function openCapture() {
+  const f = $('#captureForm');
+  f.reset();
+  $('[data-groups]', f).innerHTML = groupChecks(null);
+  $('#captureDlg').showModal();
+}
+wireDialog($('#captureDlg'), async (o) => {
+  if (!o.groups?.length) throw new Error('Pick at least one part of the progression');
+  await api('POST', `/api/characters/${current().slot}/capture`, o);
+  toast(`Saved preset “${o.name}”.`);
+  await load(true);
+});
+function openLoadoutDialog() {
+  const f = $('#loadoutForm');
+  f.reset();
+  f.elements.name.value = `${current().name} ${new Date().toISOString().slice(0, 10)}`;
+  $('[data-loadout-groups]', f).innerHTML = S.gearGroups.map((g) => `<label><input type="checkbox" name="groups" value="${g}" checked> ${GEAR_GROUP_LABELS[g]}</label>`).join('');
+  $('#loadoutDlg').showModal();
+  f.elements.name.select();
+}
+wireDialog($('#loadoutDlg'), async (o) => {
+  if (!o.groups?.length) throw new Error('Pick at least one of gear, idols or blessings');
+  await api('POST', `/api/characters/${current().slot}/loadout`, o);
+  toast(`Saved loadout “${o.name}”.`);
+  await load(true);
+});
+
+// ---------- item creator ----------
+let itemPos = null, itemCat = null, previewTimer = null, lastPreview = null;
+
+async function openItemDialog(cid, pos = null) {
+  const f = $('#itemForm');
+  f.reset();
+  itemPos = pos;
+  const slots = pos ? [[29, 'Idol']] : Object.entries(SLOT_NAMES).filter(([c]) => Number(c) !== 29);
+  f.elements.slot.innerHTML = slots.map(([c, n]) => `<option value="${c}">${n}${Number(c) === 10 ? ' (right)' : Number(c) === 9 ? ' (left)' : ''}</option>`).join('');
+  f.elements.slot.value = String(cid);
+  f.elements.slot.disabled = Boolean(pos);
+  $('#itemTitle').textContent = pos ? 'Create idol' : 'Create item';
+  $('#itemDlg').showModal();
+  await loadItemCatalog();
+}
+
+async function loadItemCatalog() {
+  const f = $('#itemForm');
+  $('[data-preview]', f).innerHTML = '<span class="note" style="margin:0">Loading…</span>';
+  try { itemCat = catalogCache[f.elements.slot.value] ??= await api('GET', `/api/catalog/${f.elements.slot.value}`); }
+  catch (e) { $('[data-preview]', f).innerHTML = `<span class="note warn" style="margin:0">${esc(e.message)}</span>`; return; }
+  const cls = current().classId;
+  const usable = (s) => !s.classReq || (s.classReq & (1 << cls));
+  const idolSlot = Number(f.elements.slot.value) === 29;
+  const fits = (b) => !idolSlot || idolFits(b.size, itemPos);
+  // Types other classes can't use go to the end of each group.
+  f.elements.type.innerHTML = itemCat.bases.filter(fits).map((b) => `<optgroup label="${esc(b.name)}${idolSlot ? ` (${b.size.x}×${b.size.y})` : ''}">${[...b.subs].sort((a, z) => (usable(z) - usable(a)) || z.level - a.level).map((s) =>
+    `<option value="${b.id}:${s.id}">${esc(s.name)}${s.level ? ` · lvl ${s.level}` : ''}${usable(s) ? '' : ' · other class'}</option>`).join('')}</optgroup>`).join('');
+  const best = itemCat.bases.filter(fits).flatMap((b) => b.subs.filter(usable).map((s) => ({ v: `${b.id}:${s.id}`, level: s.level }))).sort((a, b) => b.level - a.level)[0];
+  if (best) f.elements.type.value = best.v;
+  fillUniques();
+  renderAffixRows();
+  syncItemKind();
+}
+
+function fillUniques() {
+  const f = $('#itemForm');
+  const q = f.elements.uq.value.trim().toLowerCase();
+  const legendary = f.elements.kind.value === 'legendary';
+  const keep = f.elements.unique.value;
+  const idolSlot = Number(f.elements.slot.value) === 29;
+  const list = itemCat.uniques.filter((u) => (!idolSlot || idolFits(itemCat.bases.find((b) => b.id === u.base)?.size ?? { x: 1, y: 1 }, itemPos))
+    && (!legendary || !u.set) && (!q || u.name.toLowerCase().includes(q) || (u.setName || '').toLowerCase().includes(q)));
+  f.elements.unique.innerHTML = list.map((u) => `<option value="${u.id}">${esc(u.name)} · ${esc(u.baseName)}${u.set ? ' · Set' : ''}${u.weaver ? ' · Weaver' : ''}</option>`).join('') || '<option value="" disabled>No matches</option>';
+  f.elements.unique.value = list.some((u) => String(u.id) === keep) ? keep : list[0] ? String(list[0].id) : '';
+}
+
+function currentBase() {
+  const f = $('#itemForm');
+  if (f.elements.kind.value === 'regular') return Number(f.elements.type.value.split(':')[0]);
+  return itemCat.uniques.find((u) => String(u.id) === f.elements.unique.value)?.base;
+}
+
+function renderAffixRows() {
+  const f = $('#itemForm');
+  const base = currentBase();
+  const box = $('[data-affixes]', f);
+  const prev = [...box.querySelectorAll('[data-row]')].map((r) => ({ id: r.querySelector('[name=aid]').value, tier: r.querySelector('[name=atier]').value, roll: r.querySelector('[name=aroll]').value }));
+  const cls = current().classId;
+  const affixes = itemCat.affixes.filter((a) => a.canRollOn.includes(base));
+  const ok = (a) => !a.classSpecificity || (a.classSpecificity & (1 << cls));
+  const opts = (kind) => affixes.filter((a) => a.kind === kind).sort((a, z) => ok(z) - ok(a)).map((a) => `<option value="${a.id}">${esc(a.name)}${ok(a) ? '' : ' · other class'}</option>`).join('');
+  const rows = Number(f.elements.slot.value) === 29 ? 2 : 4;
+  box.innerHTML = Array.from({ length: rows }, () => `<div data-row style="display:grid;grid-template-columns:1fr 80px 90px;gap:8px">
+    <select name="aid"><option value="">—</option><optgroup label="Prefixes">${opts('prefix')}</optgroup><optgroup label="Suffixes">${opts('suffix')}</optgroup></select>
+    <select name="atier"></select>
+    <input type="number" name="aroll" min="0" max="100" value="100">
+  </div>`).join('');
+  box.querySelectorAll('[data-row]').forEach((row, i) => {
+    const p = prev[i];
+    if (p && affixes.some((a) => String(a.id) === p.id)) { row.querySelector('[name=aid]').value = p.id; row.querySelector('[name=aroll]').value = p.roll; }
+    syncTier(row, p?.tier);
+  });
+}
+
+function syncTier(row, keep) {
+  const a = itemCat.affixes.find((x) => String(x.id) === row.querySelector('[name=aid]').value);
+  const t = row.querySelector('[name=atier]');
+  t.innerHTML = a ? Array.from({ length: a.tiers }, (_, i) => `<option value="${i + 1}">T${i + 1}</option>`).join('') : '<option value="">—</option>';
+  t.disabled = !a;
+  row.querySelector('[name=aroll]').disabled = !a;
+  if (a) t.value = keep && Number(keep) <= a.tiers ? keep : String(Math.min(5, a.tiers));
+}
+
+function syncItemKind() {
+  const f = $('#itemForm');
+  const idolSlot = Number(f.elements.slot.value) === 29;
+  f.elements.kind.querySelector('option[value=legendary]').disabled = idolSlot;
+  if (idolSlot && f.elements.kind.value === 'legendary') f.elements.kind.value = 'regular';
+  f.elements.fp.closest('label').style.display = idolSlot ? 'none' : '';
+  const kind = f.elements.kind.value;
+  f.querySelectorAll('[data-when]').forEach((el) => { el.style.display = el.dataset.when.split(' ').includes(kind) ? '' : 'none'; });
+  const u = itemCat?.uniques.find((x) => String(x.id) === f.elements.unique.value);
+  $('[data-potlabel]', f).textContent = u?.weaver ? "Weaver's Will (0–28)" : 'Legendary Potential (0–4)';
+  f.elements.potential.max = u?.weaver ? 28 : 4;
+  f.elements.potential.disabled = Boolean(u?.set);
+  $('[data-out="uroll"]', f).textContent = `${f.elements.uroll.value}%`;
+  schedulePreview();
+}
+
+function itemSpec() {
+  const f = $('#itemForm');
+  const kind = f.elements.kind.value;
+  const affixes = [...f.querySelectorAll('[data-row]')]
+    .map((r) => ({ id: r.querySelector('[name=aid]').value, tier: r.querySelector('[name=atier]').value, roll: r.querySelector('[name=aroll]').value }))
+    .filter((a) => a.id !== '').map((a) => ({ id: Number(a.id), tier: Number(a.tier), roll: Number(a.roll) }));
+  if (kind === 'regular') {
+    const [base, sub] = f.elements.type.value.split(':').map(Number);
+    return { kind, base, sub, forgingPotential: Number(f.elements.fp.value || 0), affixes };
+  }
+  // An empty pick must not become unique id 0.
+  const spec = { kind, uniqueId: f.elements.unique.value === '' ? -1 : Number(f.elements.unique.value), uniqueRoll: Number(f.elements.uroll.value) };
+  if (kind === 'legendary') spec.affixes = affixes;
+  else if (f.elements.potential.value !== '' && !f.elements.potential.disabled) spec.potential = Number(f.elements.potential.value);
+  return spec;
+}
+
+function schedulePreview() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(async () => {
+    const box = $('#itemForm [data-preview]');
+    lastPreview = null;
+    $('#itemForm button[value=ok]').disabled = true;
+    try {
+      const r = await api('POST', '/api/items/preview', { spec: itemSpec(), slot: current().slot, containerID: Number($('#itemForm').elements.slot.value) });
+      lastPreview = r.item;
+      box.innerHTML = itemHtml(r.item)
+        + (r.item.levelRequirement ? `<div class="small muted" style="margin-top:6px">Requires level ${r.item.levelRequirement}</div>` : '')
+        + r.warnings.map((w) => `<div class="note warn" style="margin:4px 0 0">${esc(w)}</div>`).join('');
+      $('#itemForm button[value=ok]').disabled = false;
+    } catch (e) { box.innerHTML = `<span class="note warn" style="margin:0">${esc(e.message)}</span>`; }
+  }, 120);
+}
+
+$('#itemForm').addEventListener('input', (e) => {
+  const n = e.target.name;
+  if (n === 'slot') return loadItemCatalog();
+  if (n === 'uq' || n === 'kind') fillUniques();
+  if (['kind', 'type', 'unique', 'uq'].includes(n)) renderAffixRows();
+  if (n === 'aid') syncTier(e.target.closest('[data-row]'));
+  syncItemKind();
+});
+
+$('#itemForm').addEventListener('submit', (e) => {
+  if (e.submitter?.value !== 'ok') return;
+  e.preventDefault();
+  if (!lastPreview) return;
+  const cid = Number(e.currentTarget.elements.slot.value);
+  if (cid === 29) {
+    if (!idolFits(lastPreview.size, itemPos)) return toast("That idol doesn't fit there.", 'error');
+    draft['create-items'] = [...draft['create-items'], { containerID: 29, position: { ...itemPos }, spec: itemSpec(), preview: lastPreview }];
+  } else {
+    draft['create-items'] = [...draft['create-items'].filter((x) => x.containerID !== cid), { containerID: cid, spec: itemSpec(), preview: lastPreview }];
+    draft['remove-gear'] = draft['remove-gear'].filter((x) => x !== cid);
+  }
+  $('#itemDlg').close();
+  refresh();
+});
+
+// ---------- LE Tools import ----------
+// Bookmarklet: copies the build the planner page loaded (window._loadedBuildSnapshot).
+const COPY_BUILD_BOOKMARKLET = "javascript:(()=>{const b=window._loadedBuildSnapshot;if(!b){alert('Open a build on the lastepochtools.com planner first.');return;}navigator.clipboard.writeText(b).then(()=>alert('Build copied. Paste it into LE Character Maker.'),()=>prompt('Copy this build:',b));})()";
+let importPreview = null, importTimer = null;
+
+function openImportDialog({ asNew = false } = {}) {
+  const f = $('#importForm');
+  f.reset();
+  f.querySelector('[data-modules]').innerHTML = '';
+  importPreview = null;
+  $('#copyBuildLink').href = COPY_BUILD_BOOKMARKLET;
+  const c = current();
+  f.elements.target.value = asNew || !c ? 'new' : 'current';
+  f.querySelector('[data-target-current]').textContent = c ? `This character (${c.name})` : 'This character';
+  f.querySelector('input[value=current]').disabled = !c;
+  renderImport();
+  $('#importDlg').showModal();
+  f.elements.build.focus();
+}
+
+function importModulesChosen() {
+  const f = $('#importForm');
+  if (f.elements.scope.value === 'all') return Object.keys(S.importModules);
+  return [...f.querySelectorAll('input[name=module]:checked')].map((x) => x.value);
+}
+
+function renderImport() {
+  const f = $('#importForm');
+  const p = importPreview;
+  const box = f.querySelector('[data-import-preview]');
+  const counts = p && {
+    character: `${p.bio.masteryName !== 'None' ? p.bio.masteryName : p.bio.className}, level ${p.bio.level}`,
+    equipment: `${p.gear.length} item${p.gear.length === 1 ? '' : 's'}`,
+    idols: `${p.idols.length}`,
+    blessings: `${p.blessings.length}`,
+    passives: `${p.passivePoints} points`,
+    skills: `${p.skills.length} skill${p.skills.length === 1 ? '' : 's'}`,
+    quests: `${p.quests}`,
+  };
+  // Keep the user's ticks across re-renders.
+  const unticked = new Set([...f.querySelectorAll('input[name=module]:not(:checked)')].map((x) => x.value));
+  f.querySelector('[data-modules]').innerHTML = Object.entries(S.importModules).map(([k, label]) =>
+    `<label><input type="checkbox" name="module" value="${k}" ${unticked.has(k) ? '' : 'checked'}> ${esc(label)}${counts ? ` <span class="muted small">· ${esc(counts[k])}</span>` : ''}</label>`).join('');
+  f.querySelector('[data-modules]').hidden = f.elements.scope.value === 'all';
+  f.elements.name.closest('label').hidden = f.elements.target.value !== 'new';
+  if (p && !f.elements.name.value) f.elements.name.value = `${p.bio.masteryName !== 'None' ? p.bio.masteryName : p.bio.className} ${p.bio.level}`.slice(0, 30);
+  $('#importBtn').disabled = !p;
+  if (!p) return;
+  const itemLine = (it, label) => `<div class="small" style="display:flex;gap:8px"><span class="muted" style="min-width:74px">${esc(label)}</span><span style="color:${RARITY_COLORS[it.rarity] ?? 'inherit'}">${esc(it.name)}</span></div>`;
+  const c = current();
+  const target = f.elements.target.value === 'current' ? c : null;
+  const mismatch = target && target.classId !== p.bio.classId;
+  box.innerHTML = `
+    <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap"><strong>${esc(p.bio.masteryName !== 'None' ? `${p.bio.masteryName} · ${p.bio.className}` : p.bio.className)}</strong><span class="muted small">Level ${p.bio.level}${p.dataVersion ? ` · planned for ${esc(p.dataVersion)}` : ''}</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 18px;margin-top:10px">
+      ${p.gear.map((it) => itemLine(it, SLOT_NAMES[it.containerID])).join('')}
+    </div>
+    <div class="small muted" style="margin-top:10px">${p.idols.length} idols · ${p.blessings.length} blessings · ${p.passivePoints} passive points · ${p.quests} quests</div>
+    <div class="small" style="margin-top:4px">${p.skills.map((s) => esc(s.name)).join(' · ')}</div>
+    ${mismatch ? `<p class="note warn">${esc(c.name)} is ${esc(S.classes[c.classId].name)}; passives and skills need “Class, mastery & level” included, or a new character.</p>` : ''}
+    ${p.warnings.length ? `<ul class="note warn" style="margin:8px 0 0;padding-left:18px">${p.warnings.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>` : ''}`;
+}
+
+$('#importForm').addEventListener('input', (e) => {
+  if (e.target.name !== 'build') return renderImport();
+  clearTimeout(importTimer);
+  const text = e.target.value.trim();
+  const box = $('#importForm [data-import-preview]');
+  importPreview = null;
+  if (!text) { box.innerHTML = '<span class="note" style="margin:0">Paste a build to see what it contains.</span>'; return renderImport(); }
+  importTimer = setTimeout(async () => {
+    try { importPreview = await api('POST', '/api/import/preview', { build: text }); }
+    catch (err) { box.innerHTML = `<span class="note warn" style="margin:0">${esc(err.message)}</span>`; }
+    renderImport();
+  }, 200);
+});
+
+$('#importForm').addEventListener('submit', async (e) => {
+  if (e.submitter?.value !== 'ok') return;
+  e.preventDefault();
+  const f = e.currentTarget;
+  const modules = importModulesChosen();
+  if (!importPreview || !modules.length) return toast('Paste a build and pick at least one part to import.', 'error');
+  const build = f.elements.build.value.trim();
+  const unlockIdols = f.elements['unlock-idols'].checked;
+  const summary = `${importPreview.bio.masteryName !== 'None' ? importPreview.bio.masteryName : importPreview.bio.className} ${importPreview.bio.level}`;
+  if (f.elements.target.value === 'new') {
+    const name = f.elements.name.value.trim();
+    if (!name) return toast('Name the new character.', 'error');
+    try {
+      const r = await api('POST', '/api/characters', { name, class: importPreview.bio.classId, 'import-build': { build, modules }, ...(unlockIdols ? { 'unlock-idols': true } : {}) });
+      $('#importDlg').close();
+      const notes = (r.warnings || []).filter((w) => !/^Replaced items/.test(w));
+      toast(`Created ${name} from the build.`, notes.length ? 'warn' : 'ok', notes);
+      selected = r.slot;
+      tab = 'gear';
+      await load();
+    } catch (err) { toast(err.message, 'error'); }
+    return;
+  }
+  draft['import-build'] = { build, modules, summary };
+  if (unlockIdols) draft['unlock-idols'] = true;
+  $('#importDlg').close();
+  refresh();
+  toast('Import queued. Review, then save.');
+});
+
+$('#importNewBtn').onclick = async () => {
+  if (isDirty() && !(await confirmBox('Discard changes?', 'You have unsaved changes to this character.', 'Discard', true))) return;
+  draft = null;
+  openImportDialog({ asNew: true });
+};
+
+// ---------- updates ----------
+let updateInfo = null;
+
+async function checkUpdates({ manual = false } = {}) {
+  try {
+    updateInfo = await api('POST', '/api/update/check', { force: manual });
+  } catch (err) {
+    if (manual) toast(`Couldn't check for updates: ${err.message}`, 'error');
+    return;
+  }
+  renderVersion();
+  if (!updateInfo.available) {
+    if (manual) toast(updateInfo.note ?? `You're on the latest version (v${updateInfo.current}).`);
+    return;
+  }
+  let skipped = null;
+  try { skipped = localStorage.getItem('skipUpdate'); } catch {}
+  if (manual || skipped !== updateInfo.latest) openUpdateDialog();
+}
+
+function renderVersion() {
+  const v = S?.app?.version;
+  $('#versionLabel').textContent = v ? `v${v}` : '';
+  $('#updateBtn').classList.toggle('has-update', Boolean(updateInfo?.available));
+  $('#updateBtn').title = updateInfo?.available ? `Version ${updateInfo.latest} is available` : 'Check for updates';
+}
+
+// Release notes are markdown; show them as readable plain text.
+const plainNotes = (md) => esc(md.replace(/\r/g, '').replace(/^#+\s*/gm, '').replace(/\*\*(.+?)\*\*/g, '$1').trim()).replace(/^[-*] /gm, '• ');
+
+function openUpdateDialog() {
+  const u = updateInfo;
+  $('#updateTitle').textContent = `Version ${u.latest} is available`;
+  $('#updateSub').textContent = `You have v${u.current}${u.publishedAt ? ` · released ${new Date(u.publishedAt).toLocaleDateString()}` : ''}${u.asset ? ` · ${(u.asset.size / 1e6).toFixed(0)} MB` : ''}`;
+  $('#updateNotes').innerHTML = u.notes ? plainNotes(u.notes) : '<span class="muted">No release notes.</span>';
+  $('#updateNotes').hidden = false;
+  $('#updateStatus').textContent = u.canInstall ? '' : 'Running from source: update with git pull.';
+  $('#updateNow').hidden = !u.canInstall;
+  $('#updateNow').disabled = false;
+  $('#updateNow').textContent = 'Update now';
+  $('#updatePage').href = u.url;
+  $('#updateDlg').showModal();
+}
+
+$('#updateBtn').onclick = () => checkUpdates({ manual: true });
+$('#updateSkip').onclick = () => { try { localStorage.setItem('skipUpdate', updateInfo.latest); } catch {} $('#updateDlg').close(); };
+$('#updateLater').onclick = () => $('#updateDlg').close();
+$('#updateNow').onclick = async () => {
+  if (isDirty() && !(await confirmBox('Unsaved changes', 'Updating restarts the app. Your unsaved changes will be lost.', 'Update anyway', true))) return;
+  $('#updateNow').disabled = true;
+  $('#updateNow').textContent = 'Downloading…';
+  $('#updateStatus').textContent = `Downloading v${updateInfo.latest} and checking it…`;
+  try {
+    await api('POST', '/api/update/install');
+    $('#updateStatus').textContent = 'Installed. Restarting…';
+    $('#updateNow').textContent = 'Restarting…';
+    setTimeout(() => window.close(), 1500);
+  } catch (err) {
+    $('#updateStatus').textContent = err.message;
+    $('#updateNow').disabled = false;
+    $('#updateNow').textContent = 'Try again';
+  }
+};
+
+// ---------- item data ----------
+// Bookmarklet run on a lastepochtools.com page that has the item database
+// loaded: gathers item data + English names and downloads it as a file.
+const EXPORT_ITEMDB_BOOKMARKLET = "javascript:(async()=>{const d=window.itemDB,v=window.dataVersion;if(!d||!v){alert('Open lastepochtools.com/planner first, then click this again.');return;}try{const en=await fetch('/data/'+v+'/i18n/full/en.json').then(r=>r.json());const flat={};const walk=(o,p)=>{for(const[k,x]of Object.entries(o)){const q=p?p+'.'+k:k;if(typeof x==='string')flat[q]=x;else if(x&&typeof x==='object')walk(x,q);}};walk(en,'');const keys=new Set();for(const b of[...Object.values(d.itemList.equippable),...Object.values(d.itemList.nonEquippable)]){keys.add(b.displayNameKey);for(const s of Object.values(b.subItems||{}))keys.add(s.displayNameKey);}for(const u of Object.values(d.uniqueList.uniques))keys.add(u.displayNameKey);for(const a of[...Object.values(d.affixList.singleAffixes),...Object.values(d.affixList.multiAffixes)]){keys.add(a.affixDisplayNameKey);keys.add(a.affixTitleKey);for(const p of a.affixProperties||[])keys.add(p.modDisplayNameKey);}const names={};for(const k of keys)if(k&&flat[k]!==undefined)names[k]=flat[k];const out={source:'lastepochtools.com',dataVersion:v,fetchedAt:new Date().toISOString(),itemList:d.itemList,affixList:d.affixList,uniqueList:d.uniqueList,setBonusList:d.setBonusList,setNames:d.setNames,names};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out)],{type:'application/json'}));a.download='le-item-data.json';document.body.append(a);a.click();a.remove();}catch(e){alert('Export failed: '+e.message);}})()";
+
+function openItemDataDialog() {
+  $('#exportItemDbLink').href = EXPORT_ITEMDB_BOOKMARKLET;
+  const st = S.itemDb;
+  $('#itemDataStatus').innerHTML = st.loaded
+    ? `Loaded: ${fmt(st.uniques)} uniques, ${fmt(st.affixes)} affixes (${esc(st.dataVersion)}, from ${esc(String(st.fetchedAt).slice(0, 10))}).`
+    : 'Not loaded yet. Item names, the item creator and build import need it.';
+  $('#itemDataFile').value = '';
+  $('#itemDataDlg').showModal();
+}
+
+$('#itemDataBtn').onclick = openItemDataDialog;
+$('#itemDataFile').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  $('#itemDataStatus').textContent = `Loading ${file.name}…`;
+  try {
+    const st = await api('POST', '/api/itemdb', { text: await file.text() });
+    for (const k in catalogCache) delete catalogCache[k];
+    $('#itemDataDlg').close();
+    toast(`Item data loaded: ${fmt(st.uniques)} uniques, ${fmt(st.affixes)} affixes.`);
+    await load(true);
+  } catch (err) {
+    $('#itemDataStatus').textContent = err.message;
+  }
+});
+
+// ---------- footer buttons, polling ----------
+$('#openSaves').onclick = () => api('POST', '/api/open/saves').catch((e) => toast(e.message, 'error'));
+$('#openBackups').onclick = () => api('POST', '/api/open/backups').catch((e) => toast(e.message, 'error'));
+$('#refresh').onclick = async () => {
+  if (isDirty() && !(await confirmBox('Discard changes?', 'Reloading reads characters from disk again.', 'Discard', true))) return;
+  load().then(() => toast('Reloaded.')).catch((e) => toast(e.message, 'error'));
+};
+
+// Keeps the server alive while this window is open; also watches the game.
+new EventSource('/api/events');
+let serverVersion = null;
+async function checkServerVersion() {
+  try {
+    const { codeVersion } = await api('GET', '/api/ping');
+    if (serverVersion === null) serverVersion = codeVersion;
+    else if (codeVersion !== serverVersion) {
+      serverVersion = codeVersion;
+      if (!isDirty()) return location.reload();
+      toast('The app was updated. Save or discard your changes, then reload (Ctrl+R).', 'warn');
+    }
+  } catch {}
+}
+checkServerVersion();
+setInterval(checkServerVersion, 5000);
+setInterval(async () => {
+  try {
+    const s = await api('GET', '/api/state');
+    if (s.gameRunning !== S.gameRunning) { S.gameRunning = s.gameRunning; $('#gameBanner').hidden = !s.gameRunning; renderPending(); }
+  } catch {}
+}, 5000);
+window.addEventListener('beforeunload', (e) => { if (isDirty()) e.preventDefault(); });
+
+load()
+  .then(() => { renderVersion(); checkUpdates(); }) // prompt at startup when an update is out
+  .catch((e) => { $('#content').innerHTML = `<div class="empty"><p>${esc(e.message)}</p></div>`; });
+</script>
+</body>
+</html>

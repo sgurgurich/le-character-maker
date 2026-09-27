@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LE Character Maker: build-ready Last Epoch offline characters</title>
+<meta name="description" content="Create and edit Last Epoch offline characters: level 100 in one click, any unique or legendary, idols, skills, factions, gold and materials, and import builds from LE Tools.">
+<meta property="og:title" content="LE Character Maker">
+<meta property="og:description" content="Build-ready Last Epoch offline characters in seconds.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 16 16 30 3 16Z' fill='%23d9a441'/%3E%3Cpath d='M16 9 23 16 16 23 9 16Z' fill='%23141821'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e13;
+    --bg-2: #10141b;
+    --panel: #151a23;
+    --panel-2: #1b212c;
+    --line: #252d3b;
+    --text: #e8ebf1;
+    --muted: #97a1b3;
+    --faint: #5f6a7e;
+    --gold: #d9a441;
+    --gold-2: #f0c46a;
+    --gold-soft: rgba(217, 164, 65, .12);
+    --unique: #f0a04b;
+    --legendary: #ff7a55;
+    --exalted: #c08cff;
+    --rare: #f0d468;
+    --set: #6fd88a;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 Inter, "Segoe UI", system-ui, sans-serif; overflow-x: hidden; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(10px); background: rgba(11,14,19,.72); border-bottom: 1px solid rgba(37,45,59,.6); }
+  nav .wrap { display: flex; align-items: center; gap: 22px; height: 60px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: Cinzel, serif; font-weight: 700; letter-spacing: .04em; text-decoration: none; }
+  .logo svg { width: 22px; height: 22px; }
+  nav .links { margin-left: auto; display: flex; gap: 22px; font-size: 14px; }
+  nav .links a { text-decoration: none; color: var(--muted); }
+  nav .links a:hover { color: var(--text); }
+
+  /* hero */
+  .hero { position: relative; padding: 96px 0 72px; text-align: center; isolation: isolate; }
+  .hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 620px; z-index: -1;
+    background: radial-gradient(ellipse 50% 60% at 50% 30%, rgba(217,164,65,.22), transparent 70%), radial-gradient(ellipse 35% 40% at 20% 60%, rgba(192,140,255,.10), transparent 70%), radial-gradient(ellipse 35% 40% at 80% 55%, rgba(255,122,85,.09), transparent 70%); }
+  .rune { position: absolute; left: 50%; top: 40px; width: 560px; height: 560px; transform: translateX(-50%); z-index: -1; opacity: .16; animation: spin 90s linear infinite; }
+  @keyframes spin { to { transform: translateX(-50%) rotate(360deg); } }
+  .eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; color: var(--gold-2); border: 1px solid rgba(217,164,65,.35); background: var(--gold-soft); padding: 5px 12px; border-radius: 999px; }
+  h1 { font-family: Cinzel, serif; font-size: clamp(38px, 6.2vw, 70px); line-height: 1.06; margin: 22px auto 18px; max-width: 900px; letter-spacing: .01em; }
+  h1 .glow { background: linear-gradient(180deg, #fff3d6, var(--gold) 70%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 640px; margin: 0 auto 34px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; border-radius: 10px; padding: 14px 22px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); background: var(--panel); transition: transform .12s ease, box-shadow .2s ease, background .2s; }
+  .btn:hover { transform: translateY(-1px); background: var(--panel-2); }
+  .btn.primary { background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #1a1406; border-color: transparent; box-shadow: 0 10px 30px rgba(217,164,65,.28), inset 0 1px 0 rgba(255,255,255,.35); }
+  .btn.primary:hover { box-shadow: 0 14px 38px rgba(217,164,65,.38), inset 0 1px 0 rgba(255,255,255,.35); background: linear-gradient(180deg, #f6cf7c, #dfaa48); }
+  .btn svg { width: 18px; height: 18px; }
+  .btn .sub { font-weight: 500; opacity: .75; font-size: 13px; }
+  .meta { margin-top: 14px; font-size: 13px; color: var(--faint); }
+
+  /* app mock */
+  .mock { margin: 64px auto 0; max-width: 980px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-2); box-shadow: 0 40px 120px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.02); overflow: hidden; text-align: left; transform: perspective(1600px) rotateX(4deg); transform-origin: top center; }
+  .mock-bar { height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; border-bottom: 1px solid var(--line); background: #0f131a; }
+  .mock-bar i { width: 10px; height: 10px; border-radius: 50%; background: #2b3342; }
+  .mock-bar span { margin-left: 10px; font-size: 12px; color: var(--faint); }
+  .mock-body { display: grid; grid-template-columns: 200px 1fr; min-height: 360px; font-size: 13px; }
+  .m-side { border-right: 1px solid var(--line); background: var(--panel); padding: 12px 8px; }
+  .m-new { background: var(--gold); color: #1a1406; font-weight: 600; text-align: center; border-radius: 6px; padding: 7px; margin: 0 4px 10px; font-size: 12px; }
+  .m-char { display: flex; gap: 9px; align-items: center; padding: 7px; border-radius: 7px; }
+  .m-char.on { background: var(--gold-soft); outline: 1px solid rgba(217,164,65,.4); }
+  .m-lvl { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #3a4457; display: grid; place-items: center; font-size: 11px; font-weight: 700; flex: none; }
+  .m-char.on .m-lvl { color: var(--gold); border-color: var(--gold); }
+  .m-char b { display: block; font-weight: 600; font-size: 12.5px; }
+  .m-char small { color: var(--muted); font-size: 11px; }
+  .m-main { padding: 16px 22px; }
+  .m-head { display: flex; align-items: center; gap: 10px; }
+  .m-head h4 { margin: 0; font-size: 18px; }
+  .m-head .pill { margin-left: auto; background: var(--gold); color: #1a1406; border-radius: 6px; padding: 5px 10px; font-weight: 600; font-size: 12px; }
+  .m-tabs { display: flex; gap: 16px; border-bottom: 1px solid var(--line); margin: 12px 0 12px; font-size: 12.5px; color: var(--muted); }
+  .m-tabs span { padding: 6px 0; }
+  .m-tabs .on { color: var(--text); border-bottom: 2px solid var(--gold); }
+  .m-row { display: grid; grid-template-columns: 82px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); }
+  .m-row .s { color: var(--muted); font-size: 12px; }
+  .m-row .n { font-weight: 600; }
+  .m-row .a { color: var(--muted); font-size: 12px; }
+  .m-row .t { color: var(--faint); display: inline-block; min-width: 22px; }
+  .m-pending { display: flex; gap: 6px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .m-pending b { color: var(--gold); font-size: 12px; margin-right: 4px; }
+  .m-chip { border: 1px solid #343e52; border-radius: 999px; padding: 2px 9px; font-size: 11px; color: var(--muted); }
+  .m-save { margin-left: auto; background: var(--gold); color: #1a1406; border-radius: 6px; padding: 5px 12px; font-weight: 600; font-size: 12px; }
+
+  /* sections */
+  section { padding: 96px 0 0; }
+  .kicker { color: var(--gold); font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  h2 { font-family: Cinzel, serif; font-size: clamp(28px, 4vw, 42px); line-height: 1.15; margin: 10px 0 14px; }
+  .section-lede { color: var(--muted); max-width: 620px; margin: 0 0 40px; }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .feature { background: linear-gradient(180deg, var(--panel), var(--bg-2)); border: 1px solid var(--line); border-radius: 14px; padding: 22px; position: relative; overflow: hidden; transition: border-color .2s, transform .2s; }
+  .feature:hover { border-color: rgba(217,164,65,.45); transform: translateY(-2px); }
+  .feature .ic { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--gold-soft); border: 1px solid rgba(217,164,65,.3); margin-bottom: 14px; }
+  .feature .ic svg { width: 20px; height: 20px; stroke: var(--gold-2); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .feature h3 { margin: 0 0 6px; font-size: 17px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .feature.big { grid-column: span 2; }
+  .rarities { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+  .rarities span { font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; counter-reset: step; }
+  .step { padding: 22px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); }
+  .step::before { counter-increment: step; content: counter(step); display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--gold); color: #1a1406; font-weight: 700; margin-bottom: 12px; }
+  .step h3 { margin: 0 0 6px; font-size: 17px; }
+  .step p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  code { font: 13px "Cascadia Mono", Consolas, monospace; background: var(--panel-2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+
+  .faq { display: grid; gap: 10px; max-width: 820px; }
+  details { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 16px 20px; }
+  details summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after { content: "+"; color: var(--gold); font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); margin: 12px 0 0; font-size: 15px; }
+
+  .final { margin: 110px 0 0; padding: 56px 24px; text-align: center; border-radius: 18px; border: 1px solid rgba(217,164,65,.3);
+    background: radial-gradient(ellipse 60% 120% at 50% 0%, rgba(217,164,65,.16), transparent 70%), var(--panel); }
+  .final h2 { margin-top: 0; }
+  footer { margin-top: 80px; padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--faint); font-size: 13px; }
+  footer .wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .rune { animation: none; } .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+  @media (max-width: 760px) {
+    nav .links { display: none; }
+    .hero { padding-top: 64px; }
+    .mock { transform: none; }
+    .mock-body { grid-template-columns: 1fr; }
+    .m-side { display: none; }
+    .feature.big { grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 29 16 16 30 3 16Z" fill="#d9a441"/><path d="M16 9 23 16 16 23 9 16Z" fill="#0b0e13"/></svg>LE Character Maker</a>
+    <div class="links"><a href="#features">Features</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a href="https://github.com/sgurgurich/le-character-maker">GitHub</a></div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="rune" viewBox="0 0 200 200" aria-hidden="true" fill="none" stroke="#d9a441" stroke-width=".6">
+    <circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="80"/><circle cx="100" cy="100" r="46"/>
+    <path d="M100 4 196 100 100 196 4 100Z"/><path d="M100 20 180 100 100 180 20 100Z"/>
+    <path d="M32 32 168 168M168 32 32 168"/>
+  </svg>
+  <div class="wrap">
+    <span class="eyebrow">⬥ For Last Epoch offline characters</span>
+    <h1>Build-ready characters<br><span class="glow">in seconds.</span></h1>
+    <p class="lede">Level 100, every passive point, all idol slots, any unique or legendary, maxed skills and factions. Test the build you actually want to play, without the grind.</p>
+    <div class="cta">
+      <a class="btn primary" id="download" href="https://github.com/sgurgurich/le-character-maker/releases/latest">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16"/></svg>
+        Download for Windows <span class="sub" id="dlVersion"></span>
+      </a>
+      <a class="btn" href="https://github.com/sgurgurich/le-character-maker">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+        View source
+      </a>
+    </div>
+    <div class="meta" id="dlMeta">Windows 10/11 · single exe, nothing to install · free and open source</div>
+
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><i></i><i></i><i></i><span>LE Character Maker</span></div>
+      <div class="mock-body">
+        <div class="m-side">
+          <div class="m-new">+ New character</div>
+          <div class="m-char on"><div class="m-lvl">100</div><div><b>Plaguebringer</b><small>Warlock · Acolyte</small></div></div>
+          <div class="m-char"><div class="m-lvl">100</div><div><b>Rune Scholar</b><small>Runemaster · Mage</small></div></div>
+          <div class="m-char"><div class="m-lvl">86</div><div><b>Hawkeye</b><small>Marksman · Rogue</small></div></div>
+          <div class="m-char"><div class="m-lvl">74</div><div><b>Stonewall</b><small>Forge Guard · Sentinel</small></div></div>
+        </div>
+        <div class="m-main">
+          <div class="m-head"><div><h4>Plaguebringer</h4><small style="color:var(--muted)">Level 100 Warlock · Acolyte</small></div><span class="pill">Make build-ready</span></div>
+          <div class="m-tabs"><span>Character</span><span>Progression</span><span class="on">Gear</span><span>Stash</span></div>
+          <div class="m-row"><span class="s">Helmet</span><div><span class="n" style="color:var(--legendary)">Boneclamor Barbute</span> <span class="a">· Legendary</span><div class="a"><span class="t" style="color:var(--exalted)">T7</span>+48 Curse Spell Damage · <span class="t">T5</span>38% Necrotic Resistance</div></div></div>
+          <div class="m-row"><span class="s">Main Hand</span><div><span class="n" style="color:var(--unique)">Mad Alchemist's Ladle</span> <span class="a">· rolls 100% · LP 4</span></div></div>
+          <div class="m-row"><span class="s">Body Armor</span><div><span class="n" style="color:var(--exalted)">Burial Plate</span><div class="a"><span class="t" style="color:var(--exalted)">T7</span>+15 Intelligence · <span class="t">T5</span>+142% Minion Health</div></div></div>
+          <div class="m-row"><span class="s">Relic</span><div><span class="n" style="color:var(--set)">Last Gift of the Mountain</span> <span class="a">· Set</span></div></div>
+          <div class="m-pending"><b>4 changes</b><span class="m-chip">Level 86 → 100</span><span class="m-chip">All passive points (113)</span><span class="m-chip">New Mad Alchemist's Ladle (Main Hand)</span><span class="m-chip">Max all skills</span><span class="m-save">Save</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="features" class="reveal">
+    <div class="kicker">Features</div>
+    <h2>Everything a build test needs</h2>
+    <p class="section-lede">Edits are queued and shown in plain words before anything is saved, and every save keeps a backup.</p>
+    <div class="features">
+      <div class="feature big">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2 20 12 12 22 4 12Z"/><path d="M12 7 16 12 12 17 8 12Z"/></svg></div>
+        <h3>Item and unique creator</h3>
+        <p>Any base with your choice of affixes, tiers and rolls, any unique or set item with Legendary Potential or Weaver's Will, and full legendaries. Items are written in the game's own format, byte for byte.</p>
+        <div class="rarities"><span style="color:var(--rare)">Rare</span><span style="color:var(--exalted)">Exalted</span><span style="color:var(--unique)">Unique</span><span style="color:var(--set)">Set</span><span style="color:var(--legendary)">Legendary</span><span style="color:#9fd0f5">Idols</span></div>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></svg></div>
+        <h3>Build-ready in one click</h3>
+        <p>Level 100, every passive point, all 20 idol slots, maxed skills, max faction rank and full crafting materials.</p>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M5 21h14"/></svg></div>
+        <h3>Import from LE Tools</h3>
+        <p>Bring in a planner build: gear, idols, blessings, passives, skills and hotbar. Take everything, or pick the parts.</p>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg></div>
+        <h3>Skills and hotbar</h3>
+        <p>Pick any of your class's skills for the five specialization slots, fully levelled, and arrange the hotbar.</p>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+        <h3>Gear loadouts</h3>
+        <p>Save a character's gear, idols and blessings, then copy them onto any character. Swapped-out gear is always kept.</p>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l3 6 6 .9-4.5 4.3L17.5 20 12 17l-5.5 3 1-6.8L3 8.9 9 8Z"/></svg></div>
+        <h3>Factions and favor</h3>
+        <p>Join Circle of Fortune or the Merchant's Guild, max the rank, and set your favor.</p>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></div>
+        <h3>Gold and materials</h3>
+        <p>Gold, runes, glyphs, every affix shard, dungeon keys and Ancient Bones. The app shows which characters share the stash.</p>
+      </div>
+      <div class="feature">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Safe by design</h3>
+        <p>Saving is blocked while Last Epoch is running, every save backs up the previous version, and untouched data is written back exactly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="reveal">
+    <div class="kicker">How it works</div>
+    <h2>Three steps</h2>
+    <p class="section-lede">No installer. The app keeps itself up to date and tells you when a new version is out.</p>
+    <div class="steps">
+      <div class="step"><h3>Download and run</h3><p>Grab <code>LE-Character-Maker.exe</code> and double-click it. It opens in its own window and finds your offline saves automatically.</p></div>
+      <div class="step"><h3>Load item data (once)</h3><p>For item names, the creator and build import, click <em>Item data</em> in the app and follow the three short steps using lastepochtools.com.</p></div>
+      <div class="step"><h3>Make it build-ready</h3><p>Create a character or pick one, click <em>Make build-ready</em>, add your gear, save, then launch Last Epoch and play offline.</p></div>
+    </div>
+  </section>
+
+  <section id="faq" class="reveal">
+    <div class="kicker">FAQ</div>
+    <h2>Questions</h2>
+    <div class="faq">
+      <details><summary>Does this work with online characters?</summary><p>No. It only edits offline characters stored on your PC, in <code>%USERPROFILE%\AppData\LocalLow\Eleventh Hour Games\Last Epoch\Saves</code>. Online characters live on Eleventh Hour Games' servers and can't be edited.</p></details>
+      <details><summary>Windows says it protected my PC. Is the download safe?</summary><p>The exe isn't code-signed yet, so SmartScreen warns about new downloads. Click <em>More info → Run anyway</em>. The app is open source, each release is built by GitHub Actions from the public code, and every exe is published with a SHA-256 checksum.</p></details>
+      <details><summary>Can it break my saves?</summary><p>Every save is backed up first (open <em>Backups</em> in the app to restore one), saving is blocked while the game is running, and anything you didn't change is written back byte for byte. Still, test new edits on a throwaway character first.</p></details>
+      <details><summary>Where does the item data come from?</summary><p>Item, affix and unique names come from <a href="https://www.lastepochtools.com">lastepochtools.com</a>. The app doesn't redistribute that data: you export it from their site with a bookmark and load the file into the app.</p></details>
+      <details><summary>How do updates work?</summary><p>When you open the app, it checks GitHub for a newer release. If one exists, it shows what's new and offers <em>Update now</em>, which downloads the new exe, checks it against its SHA-256 checksum, swaps it in and restarts. <em>Check for updates</em> in the sidebar does the same on demand.</p></details>
+    </div>
+  </section>
+
+  <div class="final reveal">
+    <h2>Ready to test your next build?</h2>
+    <p class="section-lede" style="margin:0 auto 26px">Free, open source, and a single download.</p>
+    <a class="btn primary" id="download2" href="https://github.com/sgurgurich/le-character-maker/releases/latest">Download for Windows</a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>LE Character Maker is a fan-made tool, not affiliated with Eleventh Hour Games or lastepochtools.com. Last Epoch is a trademark of Eleventh Hour Games.</span>
+    <span><a href="https://github.com/sgurgurich/le-character-maker">GitHub</a> · <a href="https://github.com/sgurgurich/le-character-maker/releases">Releases</a> · MIT License</span>
+  </div>
+</footer>
+
+<script>
+  // Point the download buttons at the latest release's exe, with its version and size.
+  fetch('https://api.github.com/repos/sgurgurich/le-character-maker/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((r) => {
+      const exe = r?.assets?.find((a) => /\.exe$/i.test(a.name));
+      if (!exe) return;
+      for (const id of ['download', 'download2']) document.getElementById(id).href = exe.browser_download_url;
+      document.getElementById('dlVersion').textContent = r.tag_name;
+      const date = new Date(r.published_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      document.getElementById('dlMeta').textContent = `${r.tag_name} · ${(exe.size / 1e6).toFixed(0)} MB · released ${date} · Windows 10/11 · nothing to install`;
+    })
+    .catch(() => {});
+
+  // Fade sections in as they scroll into view.
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>

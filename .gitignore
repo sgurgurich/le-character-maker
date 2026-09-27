@@ -1,0 +1,8 @@
+node_modules/
+dist/
+# Personal data the app writes next to the code when run from source
+backups/
+data/
+loadouts/
+presets/*
+!presets/campaign-complete-v16.json

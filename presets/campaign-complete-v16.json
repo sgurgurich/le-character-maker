@@ -1,0 +1,1974 @@
+{
+  "name": "campaign-complete-v16",
+  "note": "Full campaign + monolith, captured from a pre-1.0 save",
+  "saveVersion": 16,
+  "capturedAt": "2026-09-27T01:08:55.772Z",
+  "groups": {
+    "campaign": {
+      "savedQuests": [
+        {
+          "questID": 18,
+          "questStepID": 93,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            64,
+            66,
+            67,
+            65,
+            70,
+            72,
+            73,
+            136,
+            74,
+            137,
+            138,
+            148
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 48,
+          "questStepID": 281,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 1,
+          "questStepID": 4,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            1,
+            2,
+            3,
+            48
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 49,
+          "questStepID": 282,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            254,
+            254
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 94,
+          "questStepID": 493,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            404,
+            405,
+            406,
+            407,
+            408
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 5,
+          "questStepID": 14,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            22,
+            24,
+            25,
+            26,
+            62,
+            10
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 34,
+          "questStepID": 197,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            175,
+            177,
+            178,
+            179
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 2,
+          "questStepID": 24,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            4,
+            5,
+            6,
+            7,
+            20
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 6,
+          "questStepID": 47,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            11,
+            15,
+            431,
+            16,
+            17,
+            61
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 35,
+          "questStepID": 202,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            180,
+            181,
+            182,
+            190,
+            191,
+            183
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 96,
+          "questStepID": 506,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            413,
+            414,
+            415,
+            416,
+            417,
+            418,
+            419
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 99,
+          "questStepID": 520,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            427,
+            428,
+            429
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 29,
+          "questStepID": 160,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            144,
+            145,
+            146,
+            147
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 100,
+          "questStepID": 525,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            435,
+            434
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 9,
+          "questStepID": 38,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            29,
+            30,
+            31
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 10,
+          "questStepID": 40,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            28
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 13,
+          "questStepID": 60,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            41,
+            436,
+            437,
+            42,
+            438,
+            43,
+            44,
+            45,
+            49,
+            46
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 40,
+          "questStepID": 232,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            210
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 39,
+          "questStepID": 230,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            202,
+            203,
+            204,
+            205,
+            208,
+            209,
+            206,
+            207
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 41,
+          "questStepID": 234,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            211
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 14,
+          "questStepID": 101,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            139,
+            149,
+            47,
+            50,
+            88,
+            89,
+            90,
+            91,
+            96,
+            97,
+            98
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 28,
+          "questStepID": 153,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 116,
+          "questStepID": 596,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            514
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 20,
+          "questStepID": 106,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            92,
+            93,
+            94,
+            95,
+            105,
+            106
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 24,
+          "questStepID": 128,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 30,
+          "questStepID": 168,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            150,
+            151,
+            152,
+            153,
+            154
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 25,
+          "questStepID": 136,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            117,
+            118,
+            119,
+            121,
+            120,
+            122,
+            123
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 31,
+          "questStepID": 176,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            155,
+            156,
+            162,
+            157,
+            158,
+            159,
+            163,
+            160,
+            164,
+            161
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 33,
+          "questStepID": 184,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 32,
+          "questStepID": 189,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            165,
+            166,
+            167,
+            173,
+            168,
+            172
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 42,
+          "questStepID": 240,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            245,
+            212,
+            213,
+            214,
+            215,
+            239,
+            216
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 44,
+          "questStepID": 254,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            223,
+            244,
+            224,
+            225,
+            226,
+            246,
+            227,
+            228
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 43,
+          "questStepID": 246,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            217,
+            222,
+            218,
+            219,
+            220,
+            221
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 46,
+          "questStepID": 266,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            235,
+            237,
+            236,
+            238
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 45,
+          "questStepID": 261,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 50,
+          "questStepID": 288,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            258,
+            309,
+            260
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 51,
+          "questStepID": 295,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 52,
+          "questStepID": 299,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            269,
+            270
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 53,
+          "questStepID": 306,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            271,
+            272,
+            274,
+            275,
+            313,
+            276,
+            571
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 58,
+          "questStepID": 339,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            302,
+            303,
+            304,
+            305,
+            306,
+            307
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 56,
+          "questStepID": 317,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 54,
+          "questStepID": 312,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            277,
+            293,
+            294,
+            278,
+            279,
+            280,
+            308,
+            281,
+            282
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 55,
+          "questStepID": 314,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            283
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": [
+            {
+              "objectiveID": 284,
+              "progress": 2
+            },
+            {
+              "objectiveID": 285,
+              "progress": 7
+            }
+          ]
+        },
+        {
+          "questID": 57,
+          "questStepID": 332,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            295,
+            310,
+            311,
+            296,
+            297,
+            298,
+            312,
+            299,
+            300,
+            301,
+            572
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 114,
+          "questStepID": 584,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            554,
+            504
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 121,
+          "questStepID": 623,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            536
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 119,
+          "questStepID": 615,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            556,
+            558,
+            557,
+            526,
+            527,
+            528,
+            529
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 115,
+          "questStepID": 593,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            505,
+            506,
+            507,
+            567,
+            508,
+            513,
+            509,
+            510,
+            511,
+            512
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 117,
+          "questStepID": 598,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            573,
+            515
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 123,
+          "questStepID": 640,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            545,
+            546,
+            547,
+            552,
+            548,
+            549,
+            550,
+            553,
+            551,
+            568,
+            569,
+            570
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 120,
+          "questStepID": 618,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            531,
+            532
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 122,
+          "questStepID": 632,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            540,
+            541,
+            542,
+            543,
+            544
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 124,
+          "questStepID": 656,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            559,
+            560,
+            574,
+            575,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 27,
+          "questStepID": 145,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            126,
+            127,
+            128,
+            129,
+            130
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 83,
+          "questStepID": 455,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            480,
+            481,
+            482
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 87,
+          "questStepID": 468,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            490,
+            491
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 84,
+          "questStepID": 458,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            483,
+            484
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 85,
+          "questStepID": 462,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            486,
+            487
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 88,
+          "questStepID": 471,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            492,
+            493
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 89,
+          "questStepID": 475,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            472,
+            473
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 91,
+          "questStepID": 479,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 112,
+          "questStepID": 571,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            476,
+            477
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 111,
+          "questStepID": 568,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            474,
+            475
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 110,
+          "questStepID": 565,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            470,
+            471
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 113,
+          "questStepID": 573,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            478
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        }
+      ],
+      "focusedQuest": -1,
+      "unlockedWaypointScenes": [
+        "Z20",
+        "Z30",
+        "Z40",
+        "A04",
+        "A10",
+        "A30",
+        "A45",
+        "A60TR",
+        "A60",
+        "A70",
+        "A90",
+        "B10",
+        "B20",
+        "B25",
+        "B30",
+        "B33",
+        "B7S10",
+        "B40",
+        "B1S40",
+        "B50",
+        "B60",
+        "B80",
+        "EoT",
+        "C10",
+        "C20",
+        "C30",
+        "C40",
+        "C50",
+        "C60",
+        "C70",
+        "D05",
+        "D20",
+        "D30",
+        "D40",
+        "D60",
+        "D80",
+        "E10",
+        "E20",
+        "E30",
+        "E40",
+        "E50",
+        "E60",
+        "E80",
+        "E90",
+        "F10",
+        "F40",
+        "F50",
+        "F1S10",
+        "F70",
+        "F80",
+        "F90",
+        "F100",
+        "F110",
+        "G40",
+        "G60",
+        "G70",
+        "G80",
+        "G90",
+        "G96",
+        "G93",
+        "G110",
+        "H10",
+        "H40",
+        "H50",
+        "H70",
+        "H80",
+        "H100",
+        "H110",
+        "H120",
+        "MonolithHub",
+        "G2S10",
+        "D05TR",
+        "Dun1Q10",
+        "Dun2Q10",
+        "C5S10",
+        "Dun3Q10",
+        "ArenaLobby",
+        "Arena_1_Forest"
+      ],
+      "oneTimeEvents": [
+        "ChZNotification",
+        "ChANotification",
+        "A30VAActivate",
+        "A40PortalTutorialFirst",
+        "A40PortalTutorialDisable",
+        "A60-70Door",
+        "A30SavingLastRefugeIdols",
+        "A30RuneDoorOneTime",
+        "ChBNotification",
+        "B33SoulVesselSwap",
+        "B80LeftObjective",
+        "B80RightObjective",
+        "Reached EoT",
+        "Reached EoT Music",
+        "activate time travel EoT to C10",
+        "ChCNotification",
+        "ChDNotification",
+        "D30RuneDoorOneTime",
+        "ChENotification",
+        "ChFNotification",
+        "ChGNotification",
+        "G50RescueInc4",
+        "G50RescueInc2",
+        "G50RescueInc1",
+        "G50RescueInc5",
+        "G50RescueInc6",
+        "G40teleportG60",
+        "G70FireWallsComplete",
+        "G80Melvern",
+        "G80Tanavast",
+        "G80Baz",
+        "G80teleportG90",
+        "G100Liath",
+        "G100EastAltarComplete",
+        "G100WestAltarComplete",
+        "G110PortalActive",
+        "G80toH10Teleport",
+        "H40ZerrickFreed",
+        "H50Cinematic",
+        "H60BodyguardComplete",
+        "H120toH130open",
+        "MHubBridgeInitial",
+        "Bridge1to5",
+        "LostSprigganCuttingGained",
+        "Bridge5to2",
+        "Bridge1to3",
+        "Bridge3to6A",
+        "Bridge3to6B",
+        "Bridge2to6",
+        "Bridge6to7A",
+        "Bridge6to7B",
+        "Bridge7toMinihub",
+        "MinihubtoMinihub",
+        "Minihubto10",
+        "Minihubto9A",
+        "Minihubto8",
+        "Minihubto9B",
+        "MHubTimelineALLUpgradeEventFix"
+      ],
+      "sceneProgresses": [
+        {
+          "scene": "Z10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Z20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Z30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Z40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A04",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A45",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A60TR",
+          "savedProgress": 0,
+          "version": 2
+        },
+        {
+          "scene": "A60",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A70",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B33",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B7S10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B25",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B36",
+          "savedProgress": 0,
+          "version": 2
+        },
+        {
+          "scene": "B1S30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B1S40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B90",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B100",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C35",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C60",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C65",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C70",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D35",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D60",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E60",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E70",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E90",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "E100",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F60",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F1S10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F90",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F100",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F110",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F120",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "G10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "G20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "G30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "G50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "G40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H60",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H50",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H90",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H100",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H105",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H110",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H120",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H130",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H140",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B40",
+          "savedProgress": 0,
+          "version": 2
+        },
+        {
+          "scene": "B40TR",
+          "savedProgress": 0,
+          "version": 2
+        },
+        {
+          "scene": "G80",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D20",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "D05",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Dun1Q30",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "H40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C40",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "C2S10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "A90",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "B6S10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F70",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "F5S10",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "ArenaLobby",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Arena_6_VoidPit",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Arena_5_TOE",
+          "savedProgress": 0,
+          "version": 1
+        },
+        {
+          "scene": "Arena_6_Ancient",
+          "savedProgress": 0,
+          "version": 2
+        },
+        {
+          "scene": "MonolithHub",
+          "savedProgress": 0,
+          "version": 1
+        }
+      ],
+      "portalUnlocked": true,
+      "reachedTown": true
+    },
+    "monolith": {
+      "savedMonolithQuests": [
+        {
+          "questID": 64,
+          "questStepID": 380,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [],
+          "failedObjectives": [
+            331
+          ],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 63,
+          "questStepID": 373,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [
+            327,
+            328,
+            329,
+            330
+          ],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        },
+        {
+          "questID": 72,
+          "questStepID": 409,
+          "state": 0,
+          "questBranch": 0,
+          "completeObjectives": [],
+          "failedObjectives": [],
+          "nolongerRelevantObjectives": [],
+          "objectiveProgress": []
+        }
+      ],
+      "timelineCompletion": [
+        {
+          "timelineID": 1,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 2,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 3,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 4,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 5,
+          "progress": [
+            1
+          ]
+        },
+        {
+          "timelineID": 7,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 8,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 9,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 10,
+          "progress": [
+            0
+          ]
+        }
+      ],
+      "timelineDifficultyCompletion": [
+        {
+          "timelineID": 1,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 2,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 3,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 4,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 5,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 7,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 8,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 9,
+          "progress": [
+            0
+          ]
+        },
+        {
+          "timelineID": 10,
+          "progress": [
+            0
+          ]
+        }
+      ],
+      "timelineDifficultyUnlocks": [
+        {
+          "timelineID": 1,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 2,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 3,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 4,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 5,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 6,
+          "progress": [
+            1
+          ]
+        },
+        {
+          "timelineID": 7,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 8,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 9,
+          "progress": [
+            0,
+            1
+          ]
+        },
+        {
+          "timelineID": 10,
+          "progress": [
+            0,
+            1
+          ]
+        }
+      ],
+      "blessingsDiscovered": [
+        111,
+        2,
+        12,
+        67,
+        71,
+        66,
+        115,
+        6,
+        24,
+        30,
+        36,
+        20,
+        16,
+        23,
+        76,
+        78,
+        92,
+        100,
+        101,
+        110,
+        204,
+        218,
+        208,
+        184,
+        198,
+        192,
+        162,
+        178,
+        166
+      ],
+      "monolithEchoesConquered": 223,
+      "monolithTimelinesConquered": 10
+    },
+    "dungeons": {
+      "dungeonCompletion": [
+        {
+          "dungeonID": 0,
+          "tiersCompleted": [
+            0
+          ]
+        },
+        {
+          "dungeonID": 1,
+          "tiersCompleted": [
+            0,
+            1
+          ]
+        },
+        {
+          "dungeonID": 2,
+          "tiersCompleted": [
+            0
+          ]
+        }
+      ]
+    },
+    "arena": {
+      "arenaTiersCompleted": [
+        0,
+        1
+      ],
+      "maxWave": 41
+    }
+  }
+}

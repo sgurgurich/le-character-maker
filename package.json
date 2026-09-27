@@ -1,0 +1,27 @@
+{
+  "name": "le-character-maker",
+  "version": "1.0.0",
+  "description": "Create and edit Last Epoch offline characters: level, gear, uniques, idols, skills, factions and more.",
+  "type": "module",
+  "bin": {
+    "le-char": "src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/server.js --open",
+    "test": "node --test",
+    "build": "node scripts/build-exe.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sgurgurich/le-character-maker.git"
+  },
+  "homepage": "https://sgurgurich.github.io/le-character-maker/",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "postject": "^1.0.0-alpha.6"
+  }
+}

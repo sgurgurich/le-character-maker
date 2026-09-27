@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build the exe
+        run: npm run build
+      - name: Smoke-test the exe
+        shell: pwsh
+        run: |
+          $out = & ./dist/LE-Character-Maker.exe cli classes
+          if ($LASTEXITCODE -ne 0 -or -not ($out -match 'Rogue')) { throw "exe smoke test failed: $out" }
+          $out
