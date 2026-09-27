@@ -13,6 +13,8 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const EXE = 'LE-Character-Maker.exe';
+// BUILD_VERSION overrides the version, e.g. to test the updater with an older build.
+const version = process.env.BUILD_VERSION ?? pkg.version;
 const at = (...p) => path.join(root, ...p);
 
 fs.rmSync(dist, { recursive: true, force: true });
@@ -26,7 +28,7 @@ await esbuild.build({
   format: 'cjs',
   target: 'node22',
   outfile: at('dist', 'app.cjs'),
-  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
+  define: { __APP_VERSION__: JSON.stringify(version) },
   logOverride: { 'empty-import-meta': 'silent' }, // import.meta is only used when running from source
 });
 
@@ -60,4 +62,4 @@ await inject(exe, 'NODE_SEA_BLOB', fs.readFileSync(seaConfig.output), {
 const hash = createHash('sha256').update(fs.readFileSync(exe)).digest('hex');
 fs.writeFileSync(`${exe}.sha256`, `${hash}  ${EXE}\n`);
 for (const f of ['app.cjs', 'sea-prep.blob', 'sea-config.json']) fs.rmSync(at('dist', f));
-console.log(`Built ${EXE} v${pkg.version} (${(fs.statSync(exe).size / 1e6).toFixed(1)} MB), sha256 ${hash.slice(0, 12)}…`);
+console.log(`Built ${EXE} v${version} (${(fs.statSync(exe).size / 1e6).toFixed(1)} MB), sha256 ${hash.slice(0, 12)}…`);
