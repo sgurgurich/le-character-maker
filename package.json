@@ -1,6 +1,6 @@
 {
   "name": "le-character-maker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create and edit Last Epoch offline characters: level, gear, uniques, idols, skills, factions and more.",
   "type": "module",
   "bin": {

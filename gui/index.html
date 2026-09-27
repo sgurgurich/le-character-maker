@@ -1641,10 +1641,12 @@ $('#itemDataFile').addEventListener('change', async (e) => {
   $('#itemDataStatus').textContent = `Loading ${file.name}…`;
   try {
     const st = await api('POST', '/api/itemdb', { text: await file.text() });
-    for (const k in catalogCache) delete catalogCache[k];
+    // Everything fetched so far shows item ids; refetch it with names and
+    // stats, keeping any pending edits.
+    for (const cache of [gearCache, materialsCache, catalogCache]) for (const k in cache) delete cache[k];
     $('#itemDataDlg').close();
-    toast(`Item data loaded: ${fmt(st.uniques)} uniques, ${fmt(st.affixes)} affixes.`);
     await load(true);
+    toast(`Item data loaded: ${fmt(st.uniques)} uniques, ${fmt(st.affixes)} affixes.`);
   } catch (err) {
     $('#itemDataStatus').textContent = err.message;
   }

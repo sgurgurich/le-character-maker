@@ -51,7 +51,8 @@ export function loadItemDb() {
     lastError = e.code === 'ENOENT' ? 'file not found' : `${e.code ?? 'error'}: ${e.message}`;
     return null;
   }
-  const name = (key) => (key && raw.names[key]) || null;
+  // The localisation data escapes apostrophes by doubling them.
+  const name = (key) => (key && raw.names[key]?.replace(/''/g, "'")) || null;
   const bases = new Map();
   for (const b of [...Object.values(raw.itemList.equippable), ...Object.values(raw.itemList.nonEquippable)]) {
     const subs = new Map(Object.values(b.subItems ?? {}).map((s) => [s.subTypeId, { ...s, name: name(s.displayNameKey) }]));
@@ -68,7 +69,7 @@ export function loadItemDb() {
   }
   const uniques = new Map();
   for (const u of Object.values(raw.uniqueList.uniques)) {
-    uniques.set(u.uniqueId, { ...u, name: name(u.displayNameKey)?.replace(/''/g, "'") });
+    uniques.set(u.uniqueId, { ...u, name: name(u.displayNameKey) });
   }
   cached = { source: raw.source, dataVersion: raw.dataVersion, fetchedAt: raw.fetchedAt, bases, affixes, uniques, setNames: raw.setNames ?? {} };
   return cached;
